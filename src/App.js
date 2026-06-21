@@ -30,6 +30,8 @@ function prepareImportedNotes(notes = []) {
   return notes.map((note, index) => {
     const now = new Date().toISOString();
     return {
+      // crypto.randomUUID is available in all modern browsers (Chromium 92+, Firefox 95+, Safari 15.4+).
+      // The Math.random fallback is kept only for legacy environments.
       id: crypto.randomUUID ? crypto.randomUUID() : `${timestamp}-${index}-${Math.random().toString(36).slice(2, 10)}`,
       title: typeof note?.title === 'string' ? note.title : '',
       content: typeof note?.content === 'string' ? note.content : '',

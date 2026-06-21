@@ -8,6 +8,8 @@ async function copyToClipboard(value) {
   }
 
   // Legacy fallback for browsers without Clipboard API support.
+  // Modern browsers use navigator.clipboard.writeText above; this fallback
+  // may be removed once legacy browser support is no longer required.
   const input = document.createElement('textarea');
   input.value = value;
   document.body.appendChild(input);

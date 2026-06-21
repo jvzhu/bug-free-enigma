@@ -23,8 +23,34 @@ describe('import utilities', () => {
     ]);
   });
 
+  test('parseImportedMarkdown handles section without a heading', () => {
+    const notes = parseImportedMarkdown('Just some content without a heading');
+    expect(notes).toHaveLength(1);
+    expect(notes[0].title).toBe('');
+    expect(notes[0].content).toBe('Just some content without a heading');
+  });
+
+  test('parseImportedMarkdown normalises Windows CRLF line endings', () => {
+    const notes = parseImportedMarkdown('# Title\r\n\r\nContent line one\r\nContent line two');
+    expect(notes[0].title).toBe('Title');
+    expect(notes[0].content).toBe('Content line one\nContent line two');
+  });
+
+  test('parseImportedMarkdown filters empty sections', () => {
+    const notes = parseImportedMarkdown('\n\n---\n\n# Real Note\n\nBody\n\n---\n\n   ');
+    expect(notes).toHaveLength(1);
+    expect(notes[0].title).toBe('Real Note');
+  });
+
+  test('parseImportedMarkdown throws on completely empty input', () => {
+    expect(() => parseImportedMarkdown('')).toThrow('No notes found in markdown content.');
+    expect(() => parseImportedMarkdown('   \n\n   ')).toThrow('No notes found in markdown content.');
+  });
+
   test('validateImportedNote validation', () => {
     expect(validateImportedNote({ title: 'Okay', content: 'Body', tags: [] })).toEqual({ valid: true, error: '' });
     expect(validateImportedNote({ title: 42 })).toEqual({ valid: false, error: 'Note title must be a string.' });
+    expect(validateImportedNote(null)).toEqual({ valid: false, error: 'Each imported note must be an object.' });
+    expect(validateImportedNote([])).toEqual({ valid: false, error: 'Each imported note must be an object.' });
   });
 });

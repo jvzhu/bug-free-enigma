@@ -14,7 +14,7 @@ export function useToast() {
   }, []);
 
   const addToast = useCallback((message, type = 'success', duration = 3000) => {
-    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
     setToasts((current) => [...current, { id, message, type }]);
 
     if (duration > 0) {
