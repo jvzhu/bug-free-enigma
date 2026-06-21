@@ -180,7 +180,7 @@ you'll find it worth trying. Let me know what you think!
 
 ---
 
-## 🏆 MILESTONE MILESTONES (Post to Twitter when hit)
+## 🏆 MILESTONES (Post to Twitter when hit)
 
 ```
 🎯 50 upvotes: "We just hit 50 upvotes on @ProductHunt! Thank you! 🔐"
