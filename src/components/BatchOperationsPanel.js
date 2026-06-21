@@ -18,7 +18,11 @@ function BatchOperationsPanel({
   const [tagInput, setTagInput] = React.useState('');
 
   React.useEffect(() => {
-    setSelectedIds((current) => new Set(Array.from(current).filter((id) => notes.some((note) => note.id === id))));
+    const noteIds = new Set(notes.map((note) => note.id));
+    setSelectedIds((current) => {
+      const next = new Set(Array.from(current).filter((id) => noteIds.has(id)));
+      return next.size === current.size ? current : next;
+    });
   }, [notes]);
 
   const selectedCount = selectedIds.size;

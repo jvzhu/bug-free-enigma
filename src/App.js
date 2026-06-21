@@ -30,7 +30,7 @@ function prepareImportedNotes(notes = []) {
   return notes.map((note, index) => {
     const now = new Date().toISOString();
     return {
-      id: `${timestamp}-${index}-${Math.random().toString(36).slice(2, 8)}`,
+      id: crypto.randomUUID ? crypto.randomUUID() : `${timestamp}-${index}-${Math.random().toString(36).slice(2, 10)}`,
       title: typeof note?.title === 'string' ? note.title : '',
       content: typeof note?.content === 'string' ? note.content : '',
       tags: Array.isArray(note?.tags) ? Array.from(new Set(note.tags.filter(Boolean))) : [],

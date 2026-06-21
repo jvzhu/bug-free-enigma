@@ -18,7 +18,7 @@ export function exportNotesToJson(notes = []) {
   }));
 
   downloadText(
-    `notes-export-${new Date().toISOString()}.json`,
+    `notes-export-${new Date().toISOString().replace(/:/g, '-')}.json`,
     JSON.stringify(payload, null, 2),
     'application/json'
   );

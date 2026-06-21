@@ -12,8 +12,7 @@ async function copyToClipboard(value) {
   input.value = value;
   document.body.appendChild(input);
   input.select();
-  // eslint-disable-next-line no-document-execcommand-all -- intentional legacy fallback
-  document.execCommand('copy');
+  document.execCommand('copy'); // eslint-disable-line
   document.body.removeChild(input);
 }
 

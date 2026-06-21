@@ -1,6 +1,12 @@
 function utf8ToBase64(str) {
   const bytes = new TextEncoder().encode(str);
-  return btoa(String.fromCharCode(...bytes));
+  // Process in 0x8000-byte chunks to avoid call-stack overflow on large inputs.
+  const CHUNK = 0x8000;
+  let binary = '';
+  for (let offset = 0; offset < bytes.length; offset += CHUNK) {
+    binary += String.fromCharCode(...bytes.subarray(offset, offset + CHUNK));
+  }
+  return btoa(binary);
 }
 
 function base64ToUtf8(base64) {

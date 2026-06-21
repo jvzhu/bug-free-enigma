@@ -78,14 +78,6 @@ function ImportModal({ onClose, onImport }) {
     }
   };
 
-  const handleConfirm = () => {
-    if (!parsedNotes.length) {
-      handleParse();
-      return;
-    }
-    onImport(parsedNotes);
-  };
-
   return (
     <div className="modal-overlay">
       <div className="modal-box import-modal">
@@ -149,9 +141,11 @@ function ImportModal({ onClose, onImport }) {
           <button className="btn btn-secondary" type="button" onClick={handleParse} disabled={isParsing}>
             {isParsing ? 'Parsing…' : 'Preview'}
           </button>
-          <button className="btn btn-action" type="button" onClick={handleConfirm} disabled={isParsing}>
-            {parsedNotes.length ? 'Import' : 'Parse & Import'}
-          </button>
+          {parsedNotes.length > 0 && (
+            <button className="btn btn-action" type="button" onClick={() => onImport(parsedNotes)}>
+              Import
+            </button>
+          )}
         </div>
       </div>
     </div>

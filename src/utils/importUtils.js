@@ -61,7 +61,8 @@ export function parseImportedJson(text) {
 }
 
 export function parseImportedMarkdown(text) {
-  const sections = String(text || '')
+  const normalised = String(text || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const sections = normalised
     .split(/\n\s*---\s*\n/g)
     .map((section) => section.trim())
     .filter(Boolean);
@@ -71,7 +72,7 @@ export function parseImportedMarkdown(text) {
   }
 
   return sections.map((section, index) => {
-    const lines = section.split(/\r?\n/);
+    const lines = section.split('\n');
     const titleIndex = lines.findIndex((line) => line.startsWith('# '));
     const title = titleIndex >= 0 ? lines[titleIndex].slice(2).trim() : '';
     const contentLines = titleIndex >= 0 ? lines.slice(titleIndex + 1) : lines;
