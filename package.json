@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A simple note-taking application built with React and localStorage",
   "private": true,
+  "homepage": "https://jvzhu.github.io/bug-free-enigma",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

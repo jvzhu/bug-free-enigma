@@ -107,6 +107,67 @@ The optimized output is placed in the `build/` folder and can be served by any s
 
 ---
 
+## Deployment
+
+### 🚀 GitHub Pages (Automatic)
+
+The app is automatically deployed to GitHub Pages on every push to the `main` branch via a GitHub Actions workflow.
+
+**Live demo:** [https://jvzhu.github.io/bug-free-enigma/](https://jvzhu.github.io/bug-free-enigma/)
+
+**How it works:**
+1. Every push to `main` triggers `.github/workflows/deploy.yml`
+2. The workflow installs dependencies, runs `npm run build`, and pushes the `build/` folder to the `gh-pages` branch
+3. GitHub Pages serves the site from that branch
+
+**First-time setup:**
+1. Go to your repository **Settings → Pages**
+2. Under *Source*, select **Deploy from a branch**
+3. Choose the `gh-pages` branch and `/ (root)` folder
+4. Click **Save** — your site will be live at the URL above
+
+---
+
+### ⚡ Vercel
+
+**Live demo:** [https://bug-free-enigma.vercel.app/](https://bug-free-enigma.vercel.app/)
+
+**Option A — Import via Vercel dashboard (recommended):**
+1. Log in at [vercel.com](https://vercel.com) and click **Add New → Project**
+2. Import the `jvzhu/bug-free-enigma` repository from GitHub
+3. Vercel auto-detects Create React App and uses the settings from `vercel.json`
+4. Click **Deploy** — Vercel builds and hosts the app automatically
+
+**Option B — Vercel CLI:**
+```bash
+npm install -g vercel
+vercel login
+vercel --prod
+```
+
+**Automatic re-deployments:** Once the project is connected, every push to `main` triggers a new production deployment.
+
+---
+
+### 🌐 Custom Domain (optional)
+
+- **GitHub Pages:** Settings → Pages → Custom domain
+- **Vercel:** Project → Settings → Domains → Add
+
+---
+
+### ⚙️ Environment Variables
+
+Copy `.env.example` to `.env.local` and adjust values as needed:
+
+```bash
+cp .env.example .env.local
+```
+
+Environment variables prefixed with `REACT_APP_` are automatically embedded into the build by Create React App.
+
+---
+
 ## License
 
 MIT
