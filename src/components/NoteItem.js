@@ -1,7 +1,18 @@
 import React from 'react';
 
-function formatDate(isoString) {
+function formatRelativeTime(isoString) {
+  const now = new Date();
   const date = new Date(isoString);
+  const diffMs = now - date;
+  const diffSeconds = Math.floor(diffMs / 1000);
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffSeconds < 60) return 'just now';
+  if (diffMinutes < 60) return `${diffMinutes}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
   return date.toLocaleDateString(undefined, {
     month: 'short',
     day: 'numeric',
@@ -11,7 +22,10 @@ function formatDate(isoString) {
 
 function NoteItem({ note, isSelected, onSelect, onDelete }) {
   const title = note.title.trim() || 'Untitled Note';
-  const preview = note.content.replace(/\n/g, ' ').slice(0, 80) || 'No content';
+  const preview = note.isEncrypted
+    ? 'Encrypted note'
+    : note.content.replace(/\n/g, ' ').slice(0, 80) || 'No content';
+  const tags = note.tags || [];
 
   function handleDelete(e) {
     e.stopPropagation();
@@ -29,9 +43,21 @@ function NoteItem({ note, isSelected, onSelect, onDelete }) {
       onKeyDown={(e) => e.key === 'Enter' && onSelect(note.id)}
     >
       <div className="note-item-content">
-        <h3 className="note-item-title">{title}</h3>
-        <p className="note-item-preview">{preview}</p>
-        <span className="note-item-date">{formatDate(note.updatedAt)}</span>
+        <div className="note-item-title-row">
+          {note.isEncrypted && <span className="lock-icon" aria-label="Encrypted">🔐</span>}
+          <h3 className="note-item-title">{title}</h3>
+        </div>
+        <p className={`note-item-preview${note.isEncrypted ? ' note-item-preview--encrypted' : ''}`}>
+          {preview}
+        </p>
+        {tags.length > 0 && (
+          <div className="note-item-tags">
+            {tags.map((tag) => (
+              <span key={tag} className="tag-badge">#{tag}</span>
+            ))}
+          </div>
+        )}
+        <span className="note-item-date">{formatRelativeTime(note.updatedAt)}</span>
       </div>
       <button
         className="btn btn-icon btn-danger"
