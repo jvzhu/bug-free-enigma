@@ -10,7 +10,8 @@ function utf8ToBase64(str) {
 }
 
 function base64ToUtf8(base64) {
-  const binaryString = atob(base64);
+  const normalized = base64.replace(/ /g, '+');
+  const binaryString = atob(normalized);
   const bytes = Uint8Array.from(binaryString, (c) => c.charCodeAt(0));
   return new TextDecoder().decode(bytes);
 }
@@ -39,5 +40,5 @@ export function decodeSharePayload(hash) {
 export function generateShareUrl(note) {
   const encoded = encodeSharePayload(note);
   const base = window.location.href.split('#')[0].split('?')[0];
-  return `${base}?share=${encoded}`;
+  return `${base}?share=${encodeURIComponent(encoded)}`;
 }

@@ -157,14 +157,14 @@ function AppShell() {
 
   const deleteNotes = useCallback((ids = []) => {
     const idSet = new Set(ids);
-    ids.forEach((id) => deleteNote(id));
+    const remaining = notes.filter((note) => !idSet.has(note.id));
+    replaceNotes(remaining);
     if (selectedNoteId && idSet.has(selectedNoteId)) {
-      const remaining = notes.filter((note) => !idSet.has(note.id));
       setSelectedNoteId(remaining[0]?.id || null);
     }
     setShowBatchPanel(false);
     addToast(`Deleted ${ids.length} note${ids.length === 1 ? '' : 's'}.`, 'success');
-  }, [addToast, deleteNote, notes, selectedNoteId]);
+  }, [addToast, notes, replaceNotes, selectedNoteId]);
 
   const shouldShowAuthGate = isSetupComplete && !isAuthenticated;
 

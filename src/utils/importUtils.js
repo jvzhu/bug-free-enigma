@@ -2,7 +2,12 @@ function normalizeImportedNote(note = {}) {
   return {
     title: typeof note?.title === 'string' ? note.title : '',
     content: typeof note?.content === 'string' ? note.content : '',
-    tags: Array.isArray(note?.tags) ? note.tags.filter((tag) => typeof tag === 'string' && tag.trim()) : [],
+    tags: Array.isArray(note?.tags)
+      ? note.tags
+          .filter((tag) => typeof tag === 'string' && tag.trim())
+          .map((tag) => tag.replace(/^#+/, '').trim())
+          .filter(Boolean)
+      : [],
     isEncrypted: Boolean(note?.isEncrypted || note?.encryptedData),
     encryptedData: note?.encryptedData || null,
   };

@@ -6,7 +6,7 @@ function ToastContainer({ toasts, onDismiss }) {
       {toasts.map((toast) => (
         <div key={toast.id} className={`toast toast--${toast.type || 'success'}`}>
           <span>{toast.message}</span>
-          <button className="btn btn-icon toast-dismiss" type="button" onClick={() => onDismiss(toast.id)}>
+          <button className="btn btn-icon toast-dismiss" type="button" onClick={() => onDismiss(toast.id)} aria-label="Dismiss" title="Dismiss">
             ✕
           </button>
         </div>
