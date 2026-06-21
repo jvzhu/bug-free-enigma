@@ -1,0 +1,234 @@
+/* ── Layout ─────────────────────────────────────── */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: #4a90d9;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.app-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── Sidebar ────────────────────────────────────── */
+
+.sidebar {
+  width: 300px;
+  min-width: 220px;
+  background: #fff;
+  border-right: 1px solid #e2e8f0;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+/* ── Note List ──────────────────────────────────── */
+
+.note-list {
+  list-style: none;
+}
+
+.note-list-empty {
+  padding: 1.5rem 1rem;
+  color: #a0aec0;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.note-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid #edf2f7;
+  transition: background 0.15s;
+}
+
+.note-item:hover {
+  background: #ebf4ff;
+}
+
+.note-item--selected {
+  background: #dbeafe;
+  border-left: 3px solid #4a90d9;
+}
+
+.note-item-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+.note-item-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #2d3748;
+}
+
+.note-item-preview {
+  font-size: 0.8rem;
+  color: #718096;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 0.15rem;
+}
+
+.note-item-date {
+  font-size: 0.72rem;
+  color: #a0aec0;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+/* ── Editor Pane ────────────────────────────────── */
+
+.editor-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex: 1;
+  color: #a0aec0;
+  font-size: 1rem;
+}
+
+/* ── Note Editor ────────────────────────────────── */
+
+.note-editor {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+.note-editor-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 0.5rem;
+  background: transparent;
+  transition: border-color 0.15s;
+}
+
+.note-editor-title:focus {
+  border-bottom-color: #4a90d9;
+}
+
+.note-editor-meta {
+  font-size: 0.78rem;
+  color: #a0aec0;
+  margin-bottom: 1rem;
+}
+
+.note-editor-content {
+  flex: 1;
+  resize: none;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #4a5568;
+  background: transparent;
+  font-family: inherit;
+  width: 100%;
+}
+
+/* ── Buttons ────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.45rem 1rem;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: #fff;
+  color: #4a90d9;
+}
+
+.btn-primary:hover {
+  background: #ebf4ff;
+}
+
+.btn-icon {
+  background: transparent;
+  padding: 0.3rem 0.4rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.note-item:hover .btn-icon,
+.note-item--selected .btn-icon {
+  opacity: 1;
+}
+
+.btn-danger:hover {
+  background: #fed7d7;
+}
+
+/* ── Responsive ─────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .sidebar {
+    width: 100%;
+    max-height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .app-body {
+    flex-direction: column;
+  }
+}
