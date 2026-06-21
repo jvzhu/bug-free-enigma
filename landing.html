@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Bug-Free Enigma — Secure, encrypted notes right in your browser. AES-GCM-256 encryption, zero backend, no account required. 100% open source." />
+  <meta property="og:title" content="Bug-Free Enigma — Encrypted Notes App" />
+  <meta property="og:description" content="AES-GCM-256 encryption, zero backend, no sign-up required. Your notes, fully private." />
+  <meta property="og:url" content="https://jvzhu.github.io/bug-free-enigma/landing.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Bug-Free Enigma — Encrypted Notes App" />
+  <meta name="twitter:description" content="Secure notes that never leave your browser. AES-GCM-256, WebAuthn, open source." />
+  <title>Bug-Free Enigma — Secure Encrypted Notes</title>
+  <style>
+    /* ── CSS Variables ─────────────────────────────────── */
+    :root {
+      --bg: #ffffff;
+      --bg2: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --text2: #475569;
+      --muted: #94a3b8;
+      --border: #e2e8f0;
+      --primary: #6366f1;
+      --primary-d: #4f46e5;
+      --primary-l: #eef2ff;
+      --accent: #06b6d4;
+      --success: #22c55e;
+      --r: 12px;
+      --r-lg: 20px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --bg2: #1e293b;
+      --card: #1e293b;
+      --text: #f1f5f9;
+      --text2: #94a3b8;
+      --muted: #64748b;
+      --border: #334155;
+      --primary: #818cf8;
+      --primary-d: #6366f1;
+      --primary-l: #1e1b4b;
+    }
+
+    /* ── Reset ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background .2s, color .2s;
+    }
+
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; display: block; }
+
+    /* ── Nav ───────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; gap: 2rem;
+      padding: .9rem 5%;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-logo { display: flex; align-items: center; gap: .5rem; font-weight: 700; font-size: 1.1rem; color: var(--text); }
+    .nav-links { display: flex; gap: 1.5rem; flex: 1; }
+    .nav-links a { color: var(--text2); font-size: .95rem; transition: color .15s; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    .nav-actions { display: flex; align-items: center; gap: .75rem; }
+
+    #theme-btn {
+      background: none; border: 1px solid var(--border); border-radius: 8px;
+      padding: .35rem .6rem; cursor: pointer; font-size: 1rem;
+    }
+    #theme-btn:hover { background: var(--bg2); }
+
+    /* ── Buttons ───────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .6rem 1.25rem;
+      border-radius: 8px; border: none;
+      font-weight: 600; font-size: .95rem;
+      cursor: pointer; white-space: nowrap;
+      text-decoration: none !important;
+      transition: transform .1s, box-shadow .1s, background .15s;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,.15); }
+    .btn:active { transform: none; }
+
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-d); }
+    .btn-secondary { background: var(--bg2); color: var(--text); border: 1px solid var(--border); }
+    .btn-sm { padding: .4rem .9rem; font-size: .85rem; }
+    .btn-lg { padding: .85rem 1.75rem; font-size: 1.05rem; }
+
+    /* ── Hero ──────────────────────────────────────────── */
+    .hero {
+      text-align: center;
+      padding: 5rem 5% 4rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--primary-l); color: var(--primary);
+      border-radius: 999px; padding: .35rem 1rem;
+      font-size: .85rem; font-weight: 600; margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 800; line-height: 1.15; margin-bottom: 1.25rem;
+      letter-spacing: -.03em;
+    }
+
+    .gradient {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1.15rem; color: var(--text2);
+      max-width: 640px; margin: 0 auto 2rem;
+    }
+
+    .ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+
+    .proof {
+      display: flex; gap: 1.25rem; justify-content: center;
+      flex-wrap: wrap; font-size: .85rem; color: var(--muted); margin-bottom: 3rem;
+    }
+
+    /* ── App mock ─────────────────────────────────────── */
+    .mock-wrap { max-width: 700px; margin: 0 auto; }
+    .mock {
+      border-radius: var(--r-lg); border: 1px solid var(--border);
+      overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,.12);
+      background: var(--card);
+    }
+    .mock-chrome {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .65rem 1rem;
+      background: var(--bg2); border-bottom: 1px solid var(--border);
+    }
+    .dots { display: flex; gap: .35rem; }
+    .dots span { width: 12px; height: 12px; border-radius: 50%; background: var(--border); }
+    .addr {
+      flex: 1; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 6px; padding: .25rem .75rem; font-size: .8rem; color: var(--text2);
+    }
+    .mock-body { display: flex; min-height: 180px; }
+    .mock-sidebar {
+      width: 180px; border-right: 1px solid var(--border);
+      padding: .75rem; display: flex; flex-direction: column; gap: .5rem;
+    }
+    .mnote { padding: .5rem .75rem; border-radius: 8px; font-size: .85rem; color: var(--text2); }
+    .mnote.active { background: var(--primary-l); color: var(--primary); font-weight: 600; }
+    .mock-editor { flex: 1; padding: 1rem 1.25rem; }
+    .mock-title { font-weight: 700; margin-bottom: .5rem; }
+    .mock-content { font-size: .875rem; color: var(--text2); line-height: 1.8; }
+    .chip {
+      display: inline-block; background: var(--primary-l); color: var(--primary);
+      border-radius: 999px; padding: .1rem .6rem; font-size: .75rem; font-weight: 600; margin: .25rem .2rem 0 0;
+    }
+
+    /* ── Sections ─────────────────────────────────────── */
+    section { padding: 5rem 5%; }
+    .section-alt { background: var(--bg2); }
+    .sh { text-align: center; margin-bottom: 3rem; }
+    .sh h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 700; margin-bottom: .75rem; letter-spacing: -.02em; }
+    .sh p { color: var(--text2); font-size: 1.05rem; }
+
+    /* ── Features grid ────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.25rem; max-width: 1200px; margin: 0 auto;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 1.5rem;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+    .card .icon { font-size: 1.75rem; margin-bottom: .75rem; }
+    .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
+    .card p { font-size: .875rem; color: var(--text2); }
+
+    /* ── Steps ────────────────────────────────────────── */
+    .steps { display: flex; gap: 2rem; max-width: 900px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+    .step { flex: 1; min-width: 220px; text-align: center; padding: 1.5rem; }
+    .step-num { font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-bottom: .75rem; }
+    .step h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: .5rem; }
+    .step p { font-size: .9rem; color: var(--text2); }
+
+    /* ── Security ─────────────────────────────────────── */
+    .sec-row { display: flex; gap: 4rem; align-items: center; max-width: 1100px; margin: 0 auto; flex-wrap: wrap; }
+    .sec-text { flex: 1; min-width: 280px; }
+    .sec-text h2 { font-size: clamp(1.5rem, 2.5vw, 2.25rem); font-weight: 700; margin-bottom: .75rem; letter-spacing: -.02em; }
+    .sec-text p { color: var(--text2); margin-bottom: 1.5rem; }
+    .sec-list { list-style: none; display: flex; flex-direction: column; gap: .75rem; margin-bottom: 2rem; }
+    .sec-list li { font-size: .95rem; color: var(--text2); padding-left: 1.5rem; position: relative; }
+    .sec-list li::before { content: '✓'; position: absolute; left: 0; color: var(--success); font-weight: 700; }
+    .sec-list strong { color: var(--text); }
+    pre.diagram {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 1.5rem 2rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: .875rem; color: var(--primary); line-height: 1.8;
+      flex-shrink: 0;
+    }
+
+    /* ── Pricing ──────────────────────────────────────── */
+    .pricing-row { display: flex; gap: 1.5rem; max-width: 1000px; margin: 0 auto; flex-wrap: wrap; justify-content: center; align-items: stretch; }
+    .pccard {
+      flex: 1; min-width: 260px; max-width: 320px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 2rem;
+      display: flex; flex-direction: column; gap: .5rem; position: relative;
+    }
+    .pccard.featured { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary); }
+    .pc-badge {
+      position: absolute; top: -.75rem; left: 50%; transform: translateX(-50%);
+      background: var(--primary); color: #fff;
+      border-radius: 999px; padding: .2rem .85rem; font-size: .75rem; font-weight: 700; white-space: nowrap;
+    }
+    .pc-name { font-size: 1.15rem; font-weight: 700; margin-top: .5rem; }
+    .pc-price { font-size: 2rem; font-weight: 800; color: var(--primary); }
+    .pc-price span { font-size: 1rem; font-weight: 400; color: var(--muted); }
+    .pc-sub { font-size: .8rem; color: var(--muted); }
+    .pc-features { list-style: none; flex: 1; display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1.5rem; }
+    .pc-features li { font-size: .875rem; color: var(--text2); }
+
+    /* ── FAQ ──────────────────────────────────────────── */
+    .faq-list { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: .5rem; }
+    details {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); overflow: hidden;
+    }
+    summary {
+      padding: 1rem 1.25rem; font-size: .975rem; font-weight: 600;
+      cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;
+    }
+    summary::after { content: '▼'; font-size: .75rem; color: var(--muted); transition: transform .2s; }
+    details[open] summary::after { transform: rotate(180deg); }
+    summary::-webkit-details-marker { display: none; }
+    .faq-ans { padding: 0 1.25rem 1rem; font-size: .9rem; color: var(--text2); }
+
+    /* ── Signup ───────────────────────────────────────── */
+    .signup-sec { text-align: center; max-width: 560px; margin: 0 auto; }
+    .signup-sec h2 { font-size: 1.75rem; font-weight: 700; margin-bottom: .75rem; }
+    .signup-sec p { color: var(--text2); margin-bottom: 1.5rem; }
+    .signup-form { display: flex; gap: .5rem; max-width: 440px; margin: 0 auto .75rem; flex-wrap: wrap; }
+    .signup-form input {
+      flex: 1; min-width: 200px; padding: .65rem 1rem;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: var(--card); color: var(--text); font-size: .95rem;
+    }
+    .signup-form input:focus { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .note { font-size: .8rem; color: var(--muted); }
+    #signup-success { display: none; color: var(--success); font-weight: 600; font-size: 1.05rem; margin-bottom: .75rem; }
+
+    /* ── Final CTA ────────────────────────────────────── */
+    .final { background: var(--primary-l); text-align: center; }
+    .final h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; margin-bottom: .5rem; }
+    .final p { color: var(--text2); margin-bottom: 2rem; font-size: 1.05rem; }
+
+    /* ── Footer ───────────────────────────────────────── */
+    footer {
+      background: var(--bg2); border-top: 1px solid var(--border);
+      padding: 2.5rem 5%; text-align: center;
+      display: flex; flex-direction: column; gap: 1rem; align-items: center;
+    }
+    .foot-logo { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+    .foot-links { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+    .foot-links a { font-size: .9rem; color: var(--text2); }
+    .foot-copy { font-size: .8rem; color: var(--muted); }
+
+    /* ── Responsive ───────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav .nav-links { display: none; }
+      .mock-sidebar { display: none; }
+      .sec-row { flex-direction: column; }
+      pre.diagram { font-size: .75rem; }
+      .pricing-row { flex-direction: column; align-items: center; }
+      .pccard { max-width: 100%; }
+      section { padding: 3.5rem 5%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────────────── -->
+  <nav>
+    <div class="nav-logo">
+      <span>🔐</span>
+      <span>Bug-Free Enigma</span>
+    </div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://github.com/jvzhu/bug-free-enigma" target="_blank" rel="noopener noreferrer">GitHub ⭐</a>
+    </div>
+    <div class="nav-actions">
+      <button id="theme-btn" aria-label="Toggle dark mode">🌙</button>
+      <a href="https://jvzhu.github.io/bug-free-enigma/" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">Try it free →</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ───────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="badge">
+      🚀 Now on ProductHunt —
+      <a href="https://www.producthunt.com/posts/bug-free-enigma" target="_blank" rel="noopener noreferrer">Support us ↗</a>
+    </div>
+    <h1>Encrypted notes,&nbsp;<span class="gradient">right in your browser</span></h1>
+    <p class="hero-sub">
+      AES-GCM-256 encryption. Zero backend. No account required. 100% open source.
+      Your notes stay private — because the key never leaves your device.
+    </p>
+    <div class="ctas">
+      <a href="https://jvzhu.github.io/bug-free-enigma/" class="btn btn-primary btn-lg" target="_blank" rel="noopener noreferrer">🚀 Try it free — no sign-up</a>
+      <a href="https://github.com/jvzhu/bug-free-enigma" class="btn btn-secondary btn-lg" target="_blank" rel="noopener noreferrer">⭐ Star on GitHub</a>
+    </div>
+    <div class="proof">
+      <span>✅ 23 tests passing</span>
+      <span>✅ 0 external crypto deps</span>
+      <span>✅ MIT licence</span>
+      <span>✅ Web Crypto API</span>
+    </div>
+    <div class="mock-wrap">
+      <div class="mock">
+        <div class="mock-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="addr">🔒 jvzhu.github.io/bug-free-enigma</div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-sidebar">
+            <div class="mnote active">🔐 Work ideas</div>
+            <div class="mnote">📝 Shopping list</div>
+            <div class="mnote">🔐 Journal</div>
+          </div>
+          <div class="mock-editor">
+            <div class="mock-title">Work ideas</div>
+            <div class="mock-content">
+              Encrypted with AES-GCM-256 ✓<br>
+              Auto-saved 2 seconds ago<br>
+              <span class="chip">#work</span><span class="chip">#ideas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Features ───────────────────────────────────────────────── -->
+  <section id="features" class="section-alt">
+    <div class="sh">
+      <h2>Everything you need. Nothing you don't.</h2>
+      <p>20+ features built with privacy-first principles.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="icon">🔐</div><h3>AES-GCM-256 Encryption</h3><p>Every note encrypted with the browser's built-in Web Crypto API. Zero external dependencies.</p></div>
+      <div class="card"><div class="icon">🛡️</div><h3>Zero Backend</h3><p>No server ever sees your notes. All encryption happens locally in your browser.</p></div>
+      <div class="card"><div class="icon">🤳</div><h3>Biometric Login</h3><p>Use fingerprint or Face ID via WebAuthn. Your biometric data never leaves your device.</p></div>
+      <div class="card"><div class="icon">⏰</div><h3>Session Auto-Lock</h3><p>Configurable inactivity timeout (5–30 min) automatically locks your notes.</p></div>
+      <div class="card"><div class="icon">🔍</div><h3>Real-Time Search</h3><p>Instantly search notes by title, content, or tag. Lightning-fast and fully client-side.</p></div>
+      <div class="card"><div class="icon">🏷️</div><h3>Tags & Filtering</h3><p>Organise notes with comma-separated tags and filter with a single click.</p></div>
+      <div class="card"><div class="icon">🌙</div><h3>Dark Mode</h3><p>Beautiful light and dark themes that persist across sessions.</p></div>
+      <div class="card"><div class="icon">📤</div><h3>Export / Import</h3><p>Download notes as encrypted JSON or plain Markdown. Your data, your control.</p></div>
+      <div class="card"><div class="icon">🔗</div><h3>Encrypted Sharing</h3><p>Generate a shareable link — encrypted payload lives in the URL fragment, never on a server.</p></div>
+      <div class="card"><div class="icon">📋</div><h3>Batch Operations</h3><p>Encrypt, decrypt, or delete multiple notes at once with a progress indicator.</p></div>
+      <div class="card"><div class="icon">🔑</div><h3>Recovery Codes</h3><p>10 single-use emergency recovery codes. Never get locked out of your notes.</p></div>
+      <div class="card"><div class="icon">📜</div><h3>Audit Trail</h3><p>Timestamped log of every security-relevant action: login, encrypt, export, lock.</p></div>
+    </div>
+  </section>
+
+  <!-- ── How it works ────────────────────────────────────────────── -->
+  <section id="how-it-works">
+    <div class="sh">
+      <h2>Up and running in 30 seconds</h2>
+      <p>No install. No account. No friction.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Open the app</h3>
+        <p>No sign-up. No download. Visit the live app in any modern browser.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Set your master password</h3>
+        <p>A real-time strength meter ensures your password is robust. Your key is derived with PBKDF2 — never stored.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Write &amp; encrypt</h3>
+        <p>Create notes, click Encrypt, and your content becomes AES-GCM-256 ciphertext. Only you can read it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Security ────────────────────────────────────────────────── -->
+  <section class="section-alt">
+    <div class="sec-row">
+      <div class="sec-text">
+        <h2>Security you can verify</h2>
+        <p>Every line of the crypto implementation is open source. No black boxes. No trust required.</p>
+        <ul class="sec-list">
+          <li><strong>PBKDF2</strong> — 100,000 iterations + random salt. Your password is never stored.</li>
+          <li><strong>HKDF</strong> — Key expansion with domain separation. One master key → per-purpose keys.</li>
+          <li><strong>AES-GCM-256</strong> — Authenticated encryption. Each note has a unique random IV.</li>
+          <li><strong>WebAuthn</strong> — Hardware-backed biometric login. Biometric data never leaves your device.</li>
+        </ul>
+        <a href="https://github.com/jvzhu/bug-free-enigma/blob/main/SECURITY.md" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Read security docs →</a>
+      </div>
+      <pre class="diagram">Master Password + Salt
+        │
+        ▼  PBKDF2
+   Master Key (AES-GCM)
+        │
+        ▼  HKDF
+  Encryption Key
+        │
+        ▼  AES-GCM-256
+  Encrypted Note ✓</pre>
+    </div>
+  </section>
+
+  <!-- ── Pricing ─────────────────────────────────────────────────── -->
+  <section id="pricing">
+    <div class="sh">
+      <h2>Simple, honest pricing</h2>
+      <p>All core features are free forever. No gotchas.</p>
+    </div>
+    <div class="pricing-row">
+      <div class="pccard">
+        <div class="pc-name">Free</div>
+        <div class="pc-price">$0 <span>/forever</span></div>
+        <ul class="pc-features">
+          <li>✅ Unlimited notes (localStorage)</li>
+          <li>✅ AES-GCM-256 encryption</li>
+          <li>✅ WebAuthn biometrics</li>
+          <li>✅ Session auto-lock</li>
+          <li>✅ Export / Import</li>
+          <li>✅ Dark mode</li>
+          <li>✅ Search &amp; tags</li>
+          <li>✅ Encrypted sharing links</li>
+          <li>✅ Recovery codes</li>
+          <li>✅ Audit trail</li>
+        </ul>
+        <a href="https://jvzhu.github.io/bug-free-enigma/" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Get started free</a>
+      </div>
+      <div class="pccard featured">
+        <div class="pc-badge">Coming soon</div>
+        <div class="pc-name">Premium</div>
+        <div class="pc-price">$2.99 <span>/month</span></div>
+        <p class="pc-sub">or $24.99/year</p>
+        <ul class="pc-features">
+          <li>✅ Everything in Free</li>
+          <li>☁️ Cloud sync (end-to-end encrypted)</li>
+          <li>🔄 Cross-device access</li>
+          <li>📁 Folders &amp; organisation</li>
+          <li>🔍 Full-text encrypted search</li>
+          <li>🎨 Custom themes</li>
+          <li>📧 Priority support</li>
+        </ul>
+        <button class="btn btn-secondary" disabled>Notify me (soon)</button>
+      </div>
+      <div class="pccard">
+        <div class="pc-name">Teams</div>
+        <div class="pc-price">$9.99 <span>/month</span></div>
+        <p class="pc-sub">or $99.99/year</p>
+        <ul class="pc-features">
+          <li>✅ Everything in Premium</li>
+          <li>👥 Shared workspaces</li>
+          <li>🔐 Team admin console</li>
+          <li>📊 Team analytics</li>
+          <li>🏢 SSO/SAML (roadmap)</li>
+          <li>💼 Priority support + SLA</li>
+        </ul>
+        <button class="btn btn-secondary" disabled>Coming soon</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ─────────────────────────────────────────────────────── -->
+  <section id="faq" class="section-alt">
+    <div class="sh">
+      <h2>Frequently asked questions</h2>
+    </div>
+    <div class="faq-list">
+      <details>
+        <summary>Can Bug-Free Enigma read my notes?</summary>
+        <p class="faq-ans">No. The encryption key is derived from your password in your browser and is never transmitted anywhere. We have no backend and no way to access your data.</p>
+      </details>
+      <details>
+        <summary>What happens if I forget my master password?</summary>
+        <p class="faq-ans">You can use one of the 10 single-use recovery codes generated when you set up your password. Without a code, encrypted notes cannot be recovered — which is by design.</p>
+      </details>
+      <details>
+        <summary>Is biometric login secure?</summary>
+        <p class="faq-ans">Yes. WebAuthn biometrics uses hardware-backed private keys that never leave your device or browser. Your fingerprint data is processed entirely by your device's secure enclave.</p>
+      </details>
+      <details>
+        <summary>Does it work offline?</summary>
+        <p class="faq-ans">Yes — once loaded, the app works completely offline. Notes are stored in your browser's localStorage.</p>
+      </details>
+      <details>
+        <summary>Is the source code available?</summary>
+        <p class="faq-ans">Absolutely. Bug-Free Enigma is fully open source under the MIT licence on GitHub. Inspect every line of the crypto implementation.</p>
+      </details>
+      <details>
+        <summary>What encryption algorithm does it use?</summary>
+        <p class="faq-ans">AES-GCM-256 for encryption, PBKDF2 (100,000 iterations, random salt) for key derivation, and HKDF for key expansion. All via the browser's native Web Crypto API (crypto.subtle).</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ── Email signup ─────────────────────────────────────────────── -->
+  <section>
+    <div class="signup-sec">
+      <h2>Stay in the loop</h2>
+      <p>Get notified when Premium launches and receive early-supporter pricing. No spam — ever.</p>
+      <p id="signup-success">🎉 You're on the list! We'll be in touch.</p>
+      <form class="signup-form" id="signup-form" onsubmit="handleSignup(event)">
+        <input type="email" id="signup-email" placeholder="your@email.com" required aria-label="Email address" />
+        <button type="submit" class="btn btn-primary">Notify me</button>
+      </form>
+      <p class="note">We'll only email you about major updates. Unsubscribe anytime.</p>
+    </div>
+  </section>
+
+  <!-- ── Final CTA ────────────────────────────────────────────────── -->
+  <section class="final">
+    <h2>Your notes deserve to be private.</h2>
+    <p>Free. Open source. No sign-up required.</p>
+    <div class="ctas">
+      <a href="https://jvzhu.github.io/bug-free-enigma/" class="btn btn-primary btn-lg" target="_blank" rel="noopener noreferrer">🚀 Launch the app</a>
+      <a href="https://github.com/jvzhu/bug-free-enigma" class="btn btn-secondary btn-lg" target="_blank" rel="noopener noreferrer">⭐ Star on GitHub</a>
+    </div>
+  </section>
+
+  <!-- ── Footer ──────────────────────────────────────────────────── -->
+  <footer>
+    <div class="foot-logo">🔐 Bug-Free Enigma</div>
+    <div class="foot-links">
+      <a href="https://github.com/jvzhu/bug-free-enigma" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://github.com/jvzhu/bug-free-enigma/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer">Security</a>
+      <a href="https://github.com/jvzhu/bug-free-enigma/blob/main/USER_GUIDE.md" target="_blank" rel="noopener noreferrer">Docs</a>
+      <a href="https://github.com/jvzhu/bug-free-enigma/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contribute</a>
+      <a href="https://www.producthunt.com/posts/bug-free-enigma" target="_blank" rel="noopener noreferrer">ProductHunt</a>
+    </div>
+    <p class="foot-copy">
+      MIT Licence · Built with React + Web Crypto API ·
+      <a href="https://github.com/jvzhu/bug-free-enigma" target="_blank" rel="noopener noreferrer">View source</a>
+    </p>
+  </footer>
+
+  <script>
+    // ── Dark mode toggle ──────────────────────────────────
+    const btn = document.getElementById('theme-btn');
+    const saved = localStorage.getItem('landing-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    let dark = saved ? saved === 'dark' : prefersDark;
+
+    function applyTheme() {
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      btn.textContent = dark ? '☀️' : '🌙';
+    }
+
+    applyTheme();
+
+    btn.addEventListener('click', () => {
+      dark = !dark;
+      localStorage.setItem('landing-theme', dark ? 'dark' : 'light');
+      applyTheme();
+    });
+
+    // ── Email signup ──────────────────────────────────────
+    function handleSignup(e) {
+      e.preventDefault();
+      const email = document.getElementById('signup-email').value;
+      if (email) {
+        document.getElementById('signup-form').style.display = 'none';
+        document.getElementById('signup-success').style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
