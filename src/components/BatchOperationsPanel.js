@@ -18,8 +18,9 @@ function BatchOperationsPanel({
   const [tagInput, setTagInput] = React.useState('');
 
   // Sync selected IDs with the current notes list. Builds an O(n) Set of note IDs
-  // once, then filters the selection in O(m) — overall O(n+m). The state update is
-  // skipped when the selection is unchanged to avoid unnecessary re-renders.
+  // once, then filters the selection in O(m) — overall O(n+m). Returning the same
+  // Set reference when unchanged prevents React from detecting a state change and
+  // avoids unnecessary re-renders.
   React.useEffect(() => {
     const noteIds = new Set(notes.map((note) => note.id));
     setSelectedIds((current) => {

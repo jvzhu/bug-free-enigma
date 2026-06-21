@@ -61,9 +61,12 @@ function ImportModal({ onClose, onImport }) {
       }
 
       const format = detectFormat(sourceText, filename);
-      const notes = format === 'json'
-        ? parseImportedJson(sourceText)
-        : parseImportedMarkdown(sourceText);
+      let notes;
+      if (format === 'json') {
+        notes = parseImportedJson(sourceText);
+      } else {
+        notes = parseImportedMarkdown(sourceText);
+      }
 
       if (!notes.length) {
         throw new Error('No notes found to import.');

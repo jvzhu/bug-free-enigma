@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { generateId } from '../utils/fileDownload';
 
 export function useToast() {
   const [toasts, setToasts] = useState([]);
@@ -14,7 +15,7 @@ export function useToast() {
   }, []);
 
   const addToast = useCallback((message, type = 'success', duration = 3000) => {
-    const id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    const id = generateId();
     setToasts((current) => [...current, { id, message, type }]);
 
     if (duration > 0) {

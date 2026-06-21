@@ -32,7 +32,9 @@ describe('share utilities', () => {
   });
 
   test('generateShareUrl produces URL with correct base and share param', () => {
+    const originalPath = window.location.pathname;
     window.history.pushState({}, '', '/app');
+
     const note = { title: 'Shared', content: 'Body' };
     const url = generateShareUrl(note);
 
@@ -43,6 +45,8 @@ describe('share utilities', () => {
     const decodedPayload = decodeSharePayload(parsed.searchParams.get('share'));
     expect(decodedPayload.title).toBe('Shared');
     expect(decodedPayload.content).toBe('Body');
+
+    window.history.replaceState({}, '', originalPath);
   });
 
   test('decodeSharePayload returns null for invalid input', () => {
