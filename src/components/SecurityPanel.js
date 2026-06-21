@@ -83,7 +83,8 @@ function SecurityPanel({ onClose, notes, encryptionKey, onUpdateNotes, onNotify 
     try {
       setPanelError('');
       const payload = await prepareEncryptedExport(notes, encryptionKey);
-      downloadJson(`notes-export-${new Date().toISOString()}.json`, payload);
+      const timestamp = new Date().toISOString().replace(/:/g, '-');
+      downloadJson(`notes-export-${timestamp}.json`, payload);
       onNotify?.('Encrypted notes exported.', 'success');
     } catch (exportError) {
       setPanelError(exportError?.message || 'Unable to export encrypted notes.');
