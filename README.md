@@ -11,6 +11,23 @@ A secure note-taking application built with **React** and **JavaScript**. Notes 
 
 ---
 
+## 🔗 Quick Links (Persistent URLs)
+
+Shareable, stable links that won't break even if we move hosting:
+
+| Link | Purpose |
+|------|---------|
+| 🚀 [purl.archive.org/bug-free-enigma](https://purl.archive.org/bug-free-enigma) | Main app |
+| 🎯 [purl.archive.org/bug-free-enigma-ph](https://purl.archive.org/bug-free-enigma-ph) | ProductHunt launch |
+| 🌐 [purl.archive.org/bug-free-enigma-landing](https://purl.archive.org/bug-free-enigma-landing) | Landing page |
+| ⭐ [purl.archive.org/bug-free-enigma-repo](https://purl.archive.org/bug-free-enigma-repo) | GitHub repository |
+| 🔒 [purl.archive.org/bug-free-enigma-security](https://purl.archive.org/bug-free-enigma-security) | Security docs |
+| 📚 [purl.archive.org/bug-free-enigma-docs](https://purl.archive.org/bug-free-enigma-docs) | User guide |
+
+*All PURLs managed via [Archive.org](https://archive.org/services/purl/). See [`docs/PERSISTENT_URLS.md`](./docs/PERSISTENT_URLS.md) for details.*
+
+---
+
 ## Features
 
 - ✅ **Create** new notes with a single click
@@ -251,7 +268,7 @@ Environment variables prefixed with `REACT_APP_` are automatically embedded into
 
 Bug-Free Enigma is launching on [ProductHunt](https://www.producthunt.com/posts/bug-free-enigma)!
 
-**Links:**
+**Direct Links:**
 
 | Resource | URL |
 |----------|-----|
@@ -259,6 +276,17 @@ Bug-Free Enigma is launching on [ProductHunt](https://www.producthunt.com/posts/
 | 🎯 ProductHunt | https://www.producthunt.com/posts/bug-free-enigma |
 | 🌍 Landing Page | https://jvzhu.github.io/bug-free-enigma/landing.html |
 | 📁 GitHub | https://github.com/jvzhu/bug-free-enigma |
+
+**Persistent URLs (shareable, won't break):**
+
+| Resource | PURL |
+|----------|------|
+| 🌐 Live App | purl.archive.org/bug-free-enigma |
+| 🎯 ProductHunt | purl.archive.org/bug-free-enigma-ph |
+| 🌍 Landing Page | purl.archive.org/bug-free-enigma-landing |
+| 📁 GitHub | purl.archive.org/bug-free-enigma-repo |
+| 🔒 Security | purl.archive.org/bug-free-enigma-security |
+| 📚 Docs | purl.archive.org/bug-free-enigma-docs |
 
 **Marketing assets** are in the [`marketing/`](./marketing/) directory:
 
@@ -273,6 +301,7 @@ Bug-Free Enigma is launching on [ProductHunt](https://www.producthunt.com/posts/
 | [`marketing/analytics-setup.md`](./marketing/analytics-setup.md) | GA4 & UTM tracking guide |
 | [`marketing/post-launch-guide.md`](./marketing/post-launch-guide.md) | Days 2–30 follow-up strategy |
 | [`public/landing.html`](./public/landing.html) | Static landing page (dark mode, mobile-responsive) |
+| [`docs/PERSISTENT_URLS.md`](./docs/PERSISTENT_URLS.md) | PURL setup and management guide |
 
 ---
 
