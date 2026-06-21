@@ -1,6 +1,6 @@
 # 📝 Notes App
 
-A simple, clean note-taking application built with **React** and **JavaScript**. Notes are persisted automatically using the browser's **localStorage** — no backend required.
+A secure note-taking application built with **React** and **JavaScript**. Notes are persisted automatically using the browser's **localStorage** — no backend required. Features enterprise-grade encryption and authentication powered entirely by the browser's **Web Crypto API**.
 
 ---
 
@@ -13,17 +13,33 @@ A simple, clean note-taking application built with **React** and **JavaScript**.
 - 📱 **Responsive** layout — works on desktop and mobile
 - 🎨 Clean, minimal UI
 
+### 🔐 Security Features
+
+- **Master Password** — single password protects all notes; strength enforced (minimum "Fair" entropy)
+- **AES-GCM Encryption** — per-note encryption using the Web Crypto API (AES-GCM-256 or AES-GCM-128)
+- **PBKDF2 Key Derivation** — 100,000 iterations with a random salt; password never stored in plain text
+- **HKDF Key Expansion** — derived key is further expanded with HKDF for data encryption
+- **Password Strength Meter** — real-time entropy-based feedback during password entry
+- **Biometric Authentication** — WebAuthn (fingerprint / Face ID) registration and login (HTTPS only)
+- **Recovery Codes** — 10 single-use codes generated on setup; can be reprinted or regenerated at any time
+- **Session Auto-Lock** — configurable inactivity timeout (5 / 10 / 15 / 30 min) with a 2-minute warning
+- **Batch Encrypt / Decrypt** — select multiple notes and encrypt or decrypt them in one action with a progress indicator
+- **Encrypted Export** — download all notes as an AES-GCM-encrypted JSON file
+- **Audit Trail** — timestamped log of every security-relevant action (login, encrypt, export, …)
+- **Security Dashboard** — single panel for all settings: algorithm, session timeout, recovery codes, biometric
+
 ---
 
 ## Tech Stack
 
-| Layer      | Technology                     |
-|------------|-------------------------------|
-| Framework  | React 18 (Create React App)   |
-| Language   | JavaScript (ES6+)             |
-| State      | React Hooks (`useState`, `useEffect`) |
-| Persistence| Browser `localStorage` API    |
-| Styling    | CSS (no external UI library)  |
+| Layer        | Technology                                        |
+|--------------|--------------------------------------------------|
+| Framework    | React 18 (Create React App)                      |
+| Language     | JavaScript (ES6+)                                |
+| State        | React Hooks (`useState`, `useEffect`, context)   |
+| Persistence  | Browser `localStorage` API                       |
+| Cryptography | Web Crypto API (`crypto.subtle`)                 |
+| Styling      | CSS (no external UI library)                     |
 
 ---
 
@@ -32,18 +48,35 @@ A simple, clean note-taking application built with **React** and **JavaScript**.
 ```
 bug-free-enigma/
 ├── public/
-│   └── index.html          # HTML entry point
+│   └── index.html                  # HTML entry point
 ├── src/
 │   ├── components/
-│   │   ├── NoteEditor.js   # Editor panel (title + body)
-│   │   ├── NoteItem.js     # Single note in the sidebar list
-│   │   └── NoteList.js     # Sidebar note list
+│   │   ├── AuditTrailViewer.js     # Audit log viewer
+│   │   ├── AuthGate.js             # Login / lock screen
+│   │   ├── BatchOperationsPanel.js # Bulk encrypt/decrypt UI
+│   │   ├── BiometricSetup.js       # WebAuthn biometric setup
+│   │   ├── ChangePasswordModal.js  # Change master password dialog
+│   │   ├── MasterPasswordSetup.js  # First-time setup wizard
+│   │   ├── NoteEditor.js           # Editor panel (title + body + encrypt)
+│   │   ├── NoteItem.js             # Single note in the sidebar list
+│   │   ├── NoteList.js             # Sidebar note list
+│   │   ├── PasswordStrengthMeter.js# Entropy-based strength indicator
+│   │   ├── RecoveryCodesModal.js   # View / regenerate recovery codes
+│   │   ├── SecurityPanel.js        # Security settings side panel
+│   │   └── SessionWarningModal.js  # Auto-lock countdown warning
 │   ├── hooks/
-│   │   └── useNotes.js     # Custom hook — CRUD + localStorage
-│   ├── App.js              # Root component
-│   ├── App.css             # Application styles
-│   ├── index.js            # React entry point
-│   └── index.css           # Global reset / base styles
+│   │   ├── useAuth.js              # Auth state + AuthProvider / AuthContext
+│   │   ├── useNotes.js             # CRUD + per-note encrypt/decrypt
+│   │   └── useSession.js           # Inactivity timer and auto-lock
+│   ├── utils/
+│   │   ├── crypto.js               # Web Crypto API helpers
+│   │   ├── crypto.test.js          # Unit tests for crypto utilities
+│   │   ├── fileDownload.js         # Shared file-download helper
+│   │   └── securityStorage.js      # Security config + audit log persistence
+│   ├── App.js                      # Root component
+│   ├── App.css                     # Application styles
+│   ├── index.js                    # React entry point
+│   └── index.css                   # Global reset / base styles
 ├── .gitignore
 ├── package.json
 └── README.md
@@ -86,14 +119,53 @@ The optimized output is placed in the `build/` folder and can be served by any s
 
 ## Usage
 
-| Action          | How to do it                                       |
-|-----------------|----------------------------------------------------|
-| Create a note   | Click **+ New Note** in the header                |
-| Select a note   | Click any note in the left sidebar                |
-| Edit a note     | Type in the title or body — saved automatically   |
-| Delete a note   | Hover a note and click the 🗑 icon, then confirm  |
+| Action                  | How to do it                                                  |
+|-------------------------|--------------------------------------------------------------|
+| Create a note           | Click **+ New Note** in the header                          |
+| Select a note           | Click any note in the left sidebar                          |
+| Edit a note             | Type in the title or body — saved automatically             |
+| Delete a note           | Hover a note and click the 🗑 icon, then confirm            |
+| Encrypt a note          | Open a note → click **🔒 Encrypt** (requires auth)         |
+| Decrypt a note          | Click **🔓 Decrypt** on an encrypted note                  |
+| Batch encrypt/decrypt   | Click **🗂 Batch Ops** in the header                       |
+| Security settings       | Click **🔐 Security** in the header                        |
 
 > Notes are saved to `localStorage` automatically 500 ms after you stop typing. Refreshing the page or reopening the browser will restore all your notes.
+
+---
+
+## Security Architecture
+
+### Key Derivation
+
+```
+Master Password + Salt
+        │
+        ▼  PBKDF2 (SHA-256, 100 000 iterations)
+   Master Key (AES-GCM)
+        │
+        ▼  HKDF (SHA-256, info="notes-app-data")
+  Encryption Key  ──▶  AES-GCM encrypt/decrypt notes
+```
+
+### Data Storage (localStorage)
+
+| Key                     | Contents                                                  |
+|-------------------------|----------------------------------------------------------|
+| `notes-app-data`        | Array of note objects (encrypted notes store ciphertext) |
+| `notes-security-config` | PBKDF2 hash, salts, algorithm, recovery codes, prefs     |
+| `notes-audit-log`       | Timestamped security action log (max 1 000 entries)      |
+
+> **Nothing sensitive is stored in plain text.** Passwords are never persisted; the encryption key lives only in React state and is lost on page reload, requiring re-authentication.
+
+### Security Considerations
+
+- Uses the browser's `crypto.subtle` API exclusively — no third-party crypto dependencies.
+- PBKDF2 with a unique random salt and 100 000 iterations slows brute-force attacks.
+- Each note is encrypted with a fresh random IV; IVs are stored alongside the ciphertext.
+- Biometric authentication (WebAuthn) requires HTTPS and a compatible authenticator device.
+- The auto-lock timer clears the in-memory key after a configurable period of inactivity.
+- Recovery-code login grants limited access (no encryption key) to allow password reset only.
 
 ---
 
