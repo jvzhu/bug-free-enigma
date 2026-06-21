@@ -1,6 +1,6 @@
 {
   "name": "bug-free-enigma",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A simple note-taking application built with React and localStorage",
   "private": true,
   "homepage": "https://jvzhu.github.io/bug-free-enigma",

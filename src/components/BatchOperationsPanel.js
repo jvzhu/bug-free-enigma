@@ -1,11 +1,27 @@
 import React from 'react';
 import { decryptData, encryptData } from '../utils/crypto';
 
-function BatchOperationsPanel({ notes, encryptionKey, onUpdateNotes, onClose }) {
+function BatchOperationsPanel({
+  notes,
+  encryptionKey,
+  onUpdateNotes,
+  onDeleteNotes,
+  onClose,
+  onNotify,
+}) {
   const [selectedIds, setSelectedIds] = React.useState(() => new Set(notes.map((note) => note.id)));
   const [progress, setProgress] = React.useState({ processed: 0, total: 0 });
   const [results, setResults] = React.useState({});
   const [isWorking, setIsWorking] = React.useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
+  const [showTagEditor, setShowTagEditor] = React.useState(false);
+  const [tagInput, setTagInput] = React.useState('');
+
+  React.useEffect(() => {
+    setSelectedIds((current) => new Set(Array.from(current).filter((id) => notes.some((note) => note.id === id))));
+  }, [notes]);
+
+  const selectedCount = selectedIds.size;
 
   const toggleSelection = (noteId) => {
     setSelectedIds((current) => {
@@ -20,6 +36,11 @@ function BatchOperationsPanel({ notes, encryptionKey, onUpdateNotes, onClose }) 
   };
 
   const runOperation = async (mode) => {
+    if (!selectedCount) {
+      setResults({ general: 'Select at least one note.' });
+      return;
+    }
+
     if (!encryptionKey) {
       setResults({ general: 'Unlock with your master password first.' });
       return;
@@ -91,7 +112,52 @@ function BatchOperationsPanel({ notes, encryptionKey, onUpdateNotes, onClose }) 
 
     setResults(nextResults);
     onUpdateNotes(updatedNotes);
+    onNotify?.(`${mode === 'encrypt' ? 'Encrypted' : 'Decrypted'} ${targets.length} note${targets.length === 1 ? '' : 's'}.`, 'success');
     setIsWorking(false);
+  };
+
+  const handleApplyTag = () => {
+    const tag = tagInput.trim().replace(/^#/, '');
+    if (!selectedCount) {
+      setResults({ general: 'Select at least one note.' });
+      return;
+    }
+    if (!tag) {
+      setResults({ general: 'Enter a tag to apply.' });
+      return;
+    }
+
+    const updatedNotes = notes.map((note) => {
+      if (!selectedIds.has(note.id)) {
+        return note;
+      }
+
+      return {
+        ...note,
+        tags: Array.from(new Set([...(note.tags || []), tag])),
+        updatedAt: new Date().toISOString(),
+      };
+    });
+
+    onUpdateNotes(updatedNotes);
+    setResults({ general: `Applied #${tag} to ${selectedCount} note${selectedCount === 1 ? '' : 's'}.` });
+    setTagInput('');
+    setShowTagEditor(false);
+    onNotify?.(`Applied #${tag} to ${selectedCount} note${selectedCount === 1 ? '' : 's'}.`, 'success');
+  };
+
+  const handleDeleteSelected = () => {
+    if (!selectedCount) {
+      setResults({ general: 'Select at least one note.' });
+      return;
+    }
+
+    if (!showDeleteConfirm) {
+      setShowDeleteConfirm(true);
+      return;
+    }
+
+    onDeleteNotes(Array.from(selectedIds));
   };
 
   return (
@@ -116,7 +182,26 @@ function BatchOperationsPanel({ notes, encryptionKey, onUpdateNotes, onClose }) 
           <button className="btn btn-secondary" type="button" onClick={() => runOperation('decrypt')} disabled={isWorking}>
             Decrypt Selected
           </button>
+          <button className="btn btn-secondary" type="button" onClick={() => setShowTagEditor((current) => !current)}>
+            Tag Selected
+          </button>
+          <button className={`btn ${showDeleteConfirm ? 'btn-danger-solid' : 'btn-secondary'}`} type="button" onClick={handleDeleteSelected}>
+            {showDeleteConfirm ? 'Confirm Delete Selected' : 'Delete Selected'}
+          </button>
         </div>
+        {showTagEditor && (
+          <div className="inline-tag-editor">
+            <input
+              type="text"
+              value={tagInput}
+              onChange={(event) => setTagInput(event.target.value)}
+              placeholder="Enter tag"
+            />
+            <button className="btn btn-action" type="button" onClick={handleApplyTag}>
+              Apply Tag
+            </button>
+          </div>
+        )}
         <div className="progress-row">
           <div className="progress-bar">
             <span
@@ -134,7 +219,10 @@ function BatchOperationsPanel({ notes, encryptionKey, onUpdateNotes, onClose }) 
                 <input
                   type="checkbox"
                   checked={selectedIds.has(note.id)}
-                  onChange={() => toggleSelection(note.id)}
+                  onChange={() => {
+                    setShowDeleteConfirm(false);
+                    toggleSelection(note.id);
+                  }}
                 />
                 <span>{note.title || (note.isEncrypted ? '🔒 Encrypted Note' : 'Untitled Note')}</span>
               </label>
