@@ -103,10 +103,8 @@ function SecurityPanel({ onClose, notes, encryptionKey, onUpdateNotes, onNotify 
   const handleExportMarkdown = () => {
     try {
       setPanelError('');
-      downloadMarkdown(
-        `notes-export-${new Date().toISOString()}.md`,
-        exportAllNotesToMarkdown(notes)
-      );
+      const timestamp = new Date().toISOString().replace(/:/g, '-');
+      downloadMarkdown(`notes-export-${timestamp}.md`, exportAllNotesToMarkdown(notes));
       onNotify?.('Markdown export downloaded.', 'success');
     } catch (error) {
       setPanelError(error?.message || 'Unable to export markdown notes.');
