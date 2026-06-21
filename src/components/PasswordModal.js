@@ -1,34 +1,60 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 /**
- * Modal for entering or setting a note password.
+ * Modal for entering or setting a note password, or confirming a destructive action.
  *
  * Props:
- *  mode    – 'unlock' | 'set'
- *  onConfirm(password) – called when user submits
- *  onCancel()          – called when user cancels
- *  error               – optional error string to display
+ *  mode    – 'unlock' | 'set' | 'confirm'
+ *  onConfirm(password?) – called when user confirms (no arg for 'confirm' mode)
+ *  onCancel()           – called when user cancels
+ *  error                – optional error string to display
  */
 function PasswordModal({ mode, onConfirm, onCancel, error }) {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
-  const inputRef = useRef(null);
+  const firstFocusRef = useRef(null);
 
   useEffect(() => {
-    inputRef.current?.focus();
+    firstFocusRef.current?.focus();
   }, []);
 
   const passwordsMatch = password === confirm;
-  const canSubmit = password.length > 0 && (mode === 'unlock' || passwordsMatch);
+  const canSubmit = mode === 'confirm' || (password.length > 0 && (mode === 'unlock' || passwordsMatch));
 
   function handleSubmit(e) {
     e.preventDefault();
     if (!canSubmit) return;
-    onConfirm(password);
+    onConfirm(mode === 'confirm' ? undefined : password);
   }
 
   function handleOverlayClick(e) {
     if (e.target === e.currentTarget) onCancel();
+  }
+
+  if (mode === 'confirm') {
+    return (
+      <div className="modal-overlay" onClick={handleOverlayClick} role="dialog" aria-modal="true">
+        <div className="modal">
+          <h2 className="modal-title">🔓 Remove Encryption</h2>
+          <p className="modal-description">
+            The note will be saved as <strong>plain text</strong>. This cannot be undone.
+          </p>
+          <div className="modal-actions">
+            <button
+              ref={firstFocusRef}
+              type="button"
+              className="btn btn-secondary"
+              onClick={onCancel}
+            >
+              Cancel
+            </button>
+            <button type="button" className="btn btn-decrypt" onClick={() => onConfirm()}>
+              Remove Encryption
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -49,7 +75,7 @@ function PasswordModal({ mode, onConfirm, onCancel, error }) {
             <label htmlFor="modal-password">Password</label>
             <input
               id="modal-password"
-              ref={inputRef}
+              ref={firstFocusRef}
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

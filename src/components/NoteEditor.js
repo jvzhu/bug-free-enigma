@@ -11,6 +11,13 @@ function formatTimestamp(isoString) {
   });
 }
 
+function parseTags(raw) {
+  return raw
+    .split(',')
+    .map((t) => t.trim().toLowerCase().replace(/\s+/g, '-'))
+    .filter(Boolean);
+}
+
 function NoteEditor({ note, onUpdate }) {
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.isEncrypted ? '' : note.content);
@@ -23,14 +30,6 @@ function NoteEditor({ note, onUpdate }) {
   const [cryptoAvailable] = useState(isCryptoAvailable);
   const timerRef = useRef(null);
   const mountedRef = useRef(true);
-
-  function parseTags(raw) {
-    return raw
-      .split(',')
-      .map((t) => t.trim().toLowerCase().replace(/\s+/g, '-'))
-      .filter(Boolean);
-  }
-
   function scheduleUpdate(newTitle, newContent, newTags) {
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(async () => {
@@ -84,6 +83,10 @@ function NoteEditor({ note, onUpdate }) {
   }
 
   async function handleModalConfirm(password) {
+    if (modalMode === 'confirm') {
+      confirmRemoveEncryption();
+      return;
+    }
     if (modalMode === 'set') {
       // Encrypt the note
       try {
@@ -125,7 +128,12 @@ function NoteEditor({ note, onUpdate }) {
   }
 
   function handleRemoveEncryption() {
-    if (!window.confirm('Remove encryption? The note will be saved as plain text.')) return;
+    setModalMode('confirm');
+    setModalError('');
+    setShowModal(true);
+  }
+
+  function confirmRemoveEncryption() {
     onUpdate(note.id, {
       title,
       content,
@@ -136,6 +144,7 @@ function NoteEditor({ note, onUpdate }) {
       tags: parseTags(tagInput),
     });
     setActivePassword(null);
+    setShowModal(false);
   }
 
   // ── Cleanup ────────────────────────────────────────────────────────────────
