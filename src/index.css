@@ -6,13 +6,76 @@
   padding: 0;
 }
 
+/* ── CSS Custom Properties (light theme defaults) ── */
+
 body {
+  --color-accent: #4a90d9;
+  --color-accent-hover: #3a7bc8;
+  --color-accent-text: #fff;
+
+  --bg-app: #f0f4f8;
+  --bg-header: #4a90d9;
+  --bg-sidebar: #fff;
+  --bg-editor: #fff;
+  --bg-item-hover: #ebf4ff;
+  --bg-item-selected: #dbeafe;
+  --bg-modal: #fff;
+  --bg-modal-overlay: rgba(0, 0, 0, 0.45);
+  --bg-input: #fff;
+  --bg-tag: #e2e8f0;
+  --bg-tag-active: #4a90d9;
+
+  --text-primary: #2d3748;
+  --text-secondary: #718096;
+  --text-muted: #a0aec0;
+  --text-tag: #4a5568;
+  --text-tag-active: #fff;
+
+  --border-color: #e2e8f0;
+  --border-selected: #4a90d9;
+
+  --shadow-modal: 0 8px 30px rgba(0, 0, 0, 0.2);
+  --shadow-header: 0 2px 6px rgba(0, 0, 0, 0.15);
+
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, sans-serif;
-  background-color: #f0f4f8;
-  color: #2d3748;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
   height: 100vh;
   overflow: hidden;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* ── Dark theme ─────────────────────────────────── */
+
+body[data-theme='dark'] {
+  --color-accent: #63b3ed;
+  --color-accent-hover: #4299e1;
+  --color-accent-text: #1a202c;
+
+  --bg-app: #1a202c;
+  --bg-header: #2b6cb0;
+  --bg-sidebar: #2d3748;
+  --bg-editor: #2d3748;
+  --bg-item-hover: #3a4a5c;
+  --bg-item-selected: #2a4365;
+  --bg-modal: #2d3748;
+  --bg-modal-overlay: rgba(0, 0, 0, 0.65);
+  --bg-input: #3a4a5c;
+  --bg-tag: #4a5568;
+  --bg-tag-active: #63b3ed;
+
+  --text-primary: #f7fafc;
+  --text-secondary: #cbd5e0;
+  --text-muted: #718096;
+  --text-tag: #e2e8f0;
+  --text-tag-active: #1a202c;
+
+  --border-color: #4a5568;
+  --border-selected: #63b3ed;
+
+  --shadow-modal: 0 8px 30px rgba(0, 0, 0, 0.5);
+  --shadow-header: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 #root {
