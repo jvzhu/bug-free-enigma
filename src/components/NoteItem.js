@@ -10,8 +10,13 @@ function formatDate(isoString) {
 }
 
 function NoteItem({ note, isSelected, onSelect, onDelete }) {
-  const title = note.title.trim() || 'Untitled Note';
-  const preview = note.content.replace(/\n/g, ' ').slice(0, 80) || 'No content';
+  const isLocked = Boolean(note.isEncrypted);
+  const title = isLocked
+    ? note.title.trim() || '🔒 Encrypted Note'
+    : note.title.trim() || 'Untitled Note';
+  const preview = isLocked
+    ? 'Encrypted'
+    : note.content.replace(/\n/g, ' ').slice(0, 80) || 'No content';
 
   function handleDelete(e) {
     e.stopPropagation();
@@ -29,8 +34,22 @@ function NoteItem({ note, isSelected, onSelect, onDelete }) {
       onKeyDown={(e) => e.key === 'Enter' && onSelect(note.id)}
     >
       <div className="note-item-content">
-        <h3 className="note-item-title">{title}</h3>
+        <div className="note-item-title-row">
+          <h3 className="note-item-title">{title}</h3>
+          {isLocked && (
+            <span className="note-lock-badge" aria-label="Encrypted note" title="Encrypted note">
+              <span aria-hidden="true">🔒</span>
+            </span>
+          )}
+        </div>
         <p className="note-item-preview">{preview}</p>
+        {note.tags?.length > 0 && (
+          <div className="note-tags">
+            {note.tags.map((tag) => (
+              <span key={tag} className="note-tag">#{tag}</span>
+            ))}
+          </div>
+        )}
         <span className="note-item-date">{formatDate(note.updatedAt)}</span>
       </div>
       <button

@@ -10,10 +10,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
   padding: 0.75rem 1.25rem;
-  background: #4a90d9;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.18);
   flex-shrink: 0;
 }
 
@@ -21,6 +22,12 @@
   font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: 0.01em;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .app-body {
@@ -32,8 +39,8 @@
 /* ── Sidebar ────────────────────────────────────── */
 
 .sidebar {
-  width: 300px;
-  min-width: 220px;
+  width: 320px;
+  min-width: 240px;
   background: #fff;
   border-right: 1px solid #e2e8f0;
   overflow-y: auto;
@@ -48,7 +55,7 @@
 
 .note-list-empty {
   padding: 1.5rem 1rem;
-  color: #a0aec0;
+  color: #94a3b8;
   text-align: center;
   font-size: 0.9rem;
 }
@@ -69,12 +76,18 @@
 
 .note-item--selected {
   background: #dbeafe;
-  border-left: 3px solid #4a90d9;
+  border-left: 3px solid #2563eb;
 }
 
 .note-item-content {
   flex: 1;
   overflow: hidden;
+}
+
+.note-item-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .note-item-title {
@@ -83,12 +96,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #2d3748;
+  color: #1e293b;
 }
 
 .note-item-preview {
   font-size: 0.8rem;
-  color: #718096;
+  color: #64748b;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -97,9 +110,37 @@
 
 .note-item-date {
   font-size: 0.72rem;
-  color: #a0aec0;
+  color: #94a3b8;
   display: block;
-  margin-top: 0.25rem;
+  margin-top: 0.35rem;
+}
+
+.note-lock-badge {
+  font-size: 0.78rem;
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-radius: 999px;
+  padding: 0.1rem 0.35rem;
+}
+
+.note-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.note-tags--editor {
+  margin: 0 0 1rem;
+}
+
+.note-tag {
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 600;
 }
 
 /* ── Editor Pane ────────────────────────────────── */
@@ -119,7 +160,7 @@
   justify-content: center;
   gap: 1rem;
   flex: 1;
-  color: #a0aec0;
+  color: #94a3b8;
   font-size: 1rem;
 }
 
@@ -130,44 +171,148 @@
   flex-direction: column;
   flex: 1;
   padding: 1.5rem;
-  overflow: hidden;
+  overflow: auto;
+}
+
+.note-editor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .note-editor-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2d3748;
+  color: #1e293b;
   border: none;
   outline: none;
   width: 100%;
   padding: 0.25rem 0;
   border-bottom: 2px solid #e2e8f0;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   background: transparent;
   transition: border-color 0.15s;
 }
 
 .note-editor-title:focus {
-  border-bottom-color: #4a90d9;
+  border-bottom-color: #2563eb;
 }
 
 .note-editor-meta {
   font-size: 0.78rem;
-  color: #a0aec0;
+  color: #94a3b8;
   margin-bottom: 1rem;
 }
 
 .note-editor-content {
   flex: 1;
-  resize: none;
+  min-height: 320px;
+  resize: vertical;
   border: none;
   outline: none;
   font-size: 1rem;
   line-height: 1.6;
-  color: #4a5568;
+  color: #475569;
   background: transparent;
   font-family: inherit;
   width: 100%;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.status-badge--plain {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.status-badge--encrypted {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.encrypted-note-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex: 1;
+  text-align: center;
+  padding: 2rem;
+  border: 1px dashed #93c5fd;
+  border-radius: 16px;
+  background: #f8fbff;
+}
+
+.encrypted-note-icon {
+  font-size: 3rem;
+}
+
+/* ── Forms ──────────────────────────────────────── */
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.form-field--compact {
+  max-width: 420px;
+}
+
+.form-field span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.form-field input,
+.form-field select {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+  font-size: 0.95rem;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  outline: 2px solid #bfdbfe;
+  border-color: #60a5fa;
+}
+
+.form-error {
+  color: #dc2626;
+  font-size: 0.85rem;
+}
+
+.checkbox-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.checkbox-row--full {
+  width: 100%;
+}
+
+.summary-list {
+  padding-left: 1.2rem;
+  color: #334155;
+  display: grid;
+  gap: 0.45rem;
+  margin: 1rem 0 1.5rem;
 }
 
 /* ── Buttons ────────────────────────────────────── */
@@ -176,59 +321,434 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.3rem;
+  gap: 0.35rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 600;
-  padding: 0.45rem 1rem;
-  transition: background 0.15s, transform 0.1s;
+  padding: 0.55rem 1rem;
+  transition: background 0.15s, transform 0.1s, opacity 0.15s;
 }
 
 .btn:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
 }
 
-.btn-primary {
-  background: #fff;
-  color: #4a90d9;
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 
-.btn-primary:hover {
-  background: #ebf4ff;
+.btn-header {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+.btn-header:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.btn-action {
+  background: #2563eb;
+  color: #fff;
+}
+
+.btn-action:hover {
+  background: #1d4ed8;
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.btn-secondary:hover {
+  background: #cbd5e1;
+}
+
+.btn-link {
+  background: transparent;
+  color: #2563eb;
+  padding-inline: 0;
+}
+
+.btn-security {
+  min-width: 120px;
+}
+
+.btn-biometric {
+  background: #111827;
+  color: #fff;
+}
+
+.btn-biometric:hover {
+  background: #1f2937;
+}
+
+.btn-danger-solid {
+  background: #dc2626;
+  color: #fff;
+}
+
+.btn-danger-solid:hover {
+  background: #b91c1c;
 }
 
 .btn-icon {
   background: transparent;
-  padding: 0.3rem 0.4rem;
+  padding: 0.3rem 0.45rem;
   font-size: 1rem;
-  border-radius: 4px;
+  border-radius: 6px;
   flex-shrink: 0;
   opacity: 0;
   transition: opacity 0.15s, background 0.15s;
 }
 
 .note-item:hover .btn-icon,
-.note-item--selected .btn-icon {
+.note-item--selected .btn-icon,
+.modal-header .btn-icon,
+.security-panel-header .btn-icon {
   opacity: 1;
 }
 
 .btn-danger:hover {
-  background: #fed7d7;
+  background: #fee2e2;
+}
+
+.button-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.button-row--stacked {
+  align-items: stretch;
+}
+
+/* ── Auth Gate ──────────────────────────────────── */
+
+.auth-gate-overlay,
+.modal-overlay,
+.panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.62);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+}
+
+.auth-gate-card,
+.modal-box {
+  width: min(92vw, 460px);
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 25px 70px rgba(15, 23, 42, 0.28);
+  padding: 1.5rem;
+}
+
+.auth-gate-card {
+  text-align: center;
+}
+
+.auth-gate-logo {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+}
+
+.auth-gate-form {
+  margin-top: 1.25rem;
+  text-align: left;
+}
+
+/* ── Password Meter ─────────────────────────────── */
+
+.password-strength-meter {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.password-strength-meter-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.35rem;
+}
+
+.password-strength-meter-segment {
+  height: 8px;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.password-strength-meter-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+/* ── Setup Wizard ───────────────────────────────── */
+
+.setup-wizard {
+  display: grid;
+  gap: 1rem;
+}
+
+.setup-wizard-steps {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.setup-wizard-step {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e2e8f0;
+  color: #475569;
+  font-weight: 700;
+}
+
+.setup-wizard-step--active {
+  background: #2563eb;
+  color: #fff;
+}
+
+.setup-wizard-panel {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.25rem;
+}
+
+/* ── Recovery Codes ─────────────────────────────── */
+
+.recovery-codes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.recovery-code-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  font-size: 0.82rem;
+}
+
+.recovery-code-pill--used {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+/* ── Security Panel ─────────────────────────────── */
+
+.panel-overlay {
+  justify-content: flex-end;
+}
+
+.security-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(520px, 100vw);
+  height: 100vh;
+  background: #fff;
+  z-index: 50;
+  box-shadow: -24px 0 60px rgba(15, 23, 42, 0.28);
+  display: flex;
+  flex-direction: column;
+}
+
+.security-panel-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.security-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.security-section {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1rem;
+  background: #f8fafc;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.danger-zone {
+  border-color: #fecaca;
+  background: #fff5f5;
+}
+
+/* ── Modal Variants ─────────────────────────────── */
+
+.modal-box--wide {
+  width: min(92vw, 900px);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.session-warning-modal {
+  text-align: center;
+}
+
+.session-warning-countdown {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #2563eb;
+  margin: 1rem 0;
+}
+
+/* ── Batch Operations ───────────────────────────── */
+
+.batch-operations-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.batch-note-list {
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.batch-note-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.batch-note-status {
+  font-size: 0.78rem;
+  color: #475569;
+}
+
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #2563eb, #22c55e);
+}
+
+/* ── Audit Trail ────────────────────────────────── */
+
+.audit-table-wrapper {
+  max-height: 420px;
+  overflow: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.audit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.audit-table th,
+.audit-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.audit-table th {
+  position: sticky;
+  top: 0;
+  background: #eff6ff;
+}
+
+.pagination-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 /* ── Responsive ─────────────────────────────────── */
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
+  .app-body {
+    flex-direction: column;
+  }
+
   .sidebar {
     width: 100%;
-    max-height: 40vh;
+    max-height: 36vh;
     border-right: none;
     border-bottom: 1px solid #e2e8f0;
   }
+}
 
-  .app-body {
+@media (max-width: 640px) {
+  .app-header {
     flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-actions {
+    width: 100%;
+  }
+
+  .header-actions .btn {
+    flex: 1;
+  }
+
+  .note-editor-toolbar,
+  .button-row,
+  .pagination-row {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
