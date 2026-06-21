@@ -54,7 +54,7 @@ function NoteEditor({ note, onUpdate }) {
   function handleTitleChange(e) {
     const value = e.target.value;
     setTitle(value);
-    if (!isLocked) scheduleUpdate(value, content);
+    scheduleUpdate(value, content);
   }
 
   function handleContentChange(e) {
