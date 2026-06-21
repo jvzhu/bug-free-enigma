@@ -236,7 +236,7 @@ Copy `.env.example` to `.env.local` and adjust values as needed:
 cp .env.example .env.local
 ```
 
-Environment variables prefixed with `REACT_APP_` are automatically embedded into the build by Create React App.
+Variables prefixed with `REACT_APP_` are automatically embedded into the build by Create React App. `PUBLIC_URL` is a special CRA build-time variable (no `REACT_APP_` prefix required) that sets the base URL for assets.
 
 ---
 
