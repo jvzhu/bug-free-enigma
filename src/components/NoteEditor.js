@@ -23,16 +23,6 @@ function NoteEditor({ note, onUpdate }) {
   const [cryptoAvailable] = useState(isCryptoAvailable);
   const timerRef = useRef(null);
 
-  // Reset state when a different note is selected
-  useEffect(() => {
-    setTitle(note.title);
-    setContent(note.isEncrypted ? '' : note.content);
-    setTagInput((note.tags || []).join(', '));
-    setIsLocked(note.isEncrypted);
-    setActivePassword(null);
-    setModalError('');
-  }, [note.id]); // eslint-disable-line react-hooks/exhaustive-deps
-
   function parseTags(raw) {
     return raw
       .split(',')

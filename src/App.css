@@ -393,7 +393,12 @@ body[data-theme='dark'] .unlocked-badge {
 
 .locked-icon {
   font-size: 3rem;
-  animation: pulse 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .locked-icon {
+    animation: pulse 2s ease-in-out infinite;
+  }
 }
 
 @keyframes pulse {
