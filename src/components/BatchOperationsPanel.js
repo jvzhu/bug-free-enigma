@@ -188,6 +188,11 @@ function BatchOperationsPanel({
           <button className={`btn ${showDeleteConfirm ? 'btn-danger-solid' : 'btn-secondary'}`} type="button" onClick={handleDeleteSelected}>
             {showDeleteConfirm ? 'Confirm Delete Selected' : 'Delete Selected'}
           </button>
+          {showDeleteConfirm && (
+            <button className="btn btn-secondary" type="button" onClick={() => setShowDeleteConfirm(false)}>
+              Cancel Delete
+            </button>
+          )}
         </div>
         {showTagEditor && (
           <div className="inline-tag-editor">
@@ -219,10 +224,7 @@ function BatchOperationsPanel({
                 <input
                   type="checkbox"
                   checked={selectedIds.has(note.id)}
-                  onChange={() => {
-                    setShowDeleteConfirm(false);
-                    toggleSelection(note.id);
-                  }}
+                  onChange={() => toggleSelection(note.id)}
                 />
                 <span>{note.title || (note.isEncrypted ? '🔒 Encrypted Note' : 'Untitled Note')}</span>
               </label>

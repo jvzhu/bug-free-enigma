@@ -7,10 +7,12 @@ async function copyToClipboard(value) {
     return;
   }
 
+  // Legacy fallback for browsers without Clipboard API support.
   const input = document.createElement('textarea');
   input.value = value;
   document.body.appendChild(input);
   input.select();
+  // eslint-disable-next-line no-document-execcommand-all -- intentional legacy fallback
   document.execCommand('copy');
   document.body.removeChild(input);
 }

@@ -379,7 +379,7 @@ function SecurityPanel({ onClose, notes, encryptionKey, onUpdateNotes, onNotify 
               />
             </label>
             <div className="button-row">
-              <button className="btn btn-danger-solid" type="button" onClick={confirmClearSecurity}>
+              <button className="btn btn-danger-solid" type="button" onClick={confirmClearSecurity} disabled={!clearSecurityPassword}>
                 Clear Security Data
               </button>
               <button

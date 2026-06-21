@@ -1,3 +1,14 @@
+function utf8ToBase64(str) {
+  const bytes = new TextEncoder().encode(str);
+  return btoa(String.fromCharCode(...bytes));
+}
+
+function base64ToUtf8(base64) {
+  const binaryString = atob(base64);
+  const bytes = Uint8Array.from(binaryString, (c) => c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
 export function encodeSharePayload(note) {
   const payload = {
     v: 1,
@@ -8,12 +19,12 @@ export function encodeSharePayload(note) {
     isEncrypted: note.isEncrypted || false,
     sharedAt: new Date().toISOString(),
   };
-  return btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+  return utf8ToBase64(JSON.stringify(payload));
 }
 
 export function decodeSharePayload(hash) {
   try {
-    return JSON.parse(decodeURIComponent(escape(atob(hash))));
+    return JSON.parse(base64ToUtf8(hash));
   } catch {
     return null;
   }
