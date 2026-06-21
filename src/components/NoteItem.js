@@ -4,6 +4,15 @@ function formatRelativeTime(isoString) {
   const now = new Date();
   const date = new Date(isoString);
   const diffMs = now - date;
+
+  if (diffMs < 0) {
+    return date.toLocaleDateString(undefined, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  }
+
   const diffSeconds = Math.floor(diffMs / 1000);
   const diffMinutes = Math.floor(diffSeconds / 60);
   const diffHours = Math.floor(diffMinutes / 60);
