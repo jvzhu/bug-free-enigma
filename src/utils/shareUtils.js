@@ -10,6 +10,7 @@ function utf8ToBase64(str) {
 }
 
 function base64ToUtf8(base64) {
+  // URL decoding can convert '+' to a space; restore it before passing to atob().
   const normalized = base64.replace(/ /g, '+');
   const binaryString = atob(normalized);
   const bytes = Uint8Array.from(binaryString, (c) => c.charCodeAt(0));

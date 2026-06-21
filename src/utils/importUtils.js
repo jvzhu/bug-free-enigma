@@ -5,7 +5,7 @@ function normalizeImportedNote(note = {}) {
     tags: Array.isArray(note?.tags)
       ? note.tags
           .filter((tag) => typeof tag === 'string' && tag.trim())
-          .map((tag) => tag.replace(/^#+/, '').trim())
+          .map((tag) => tag.replace(/^#+/, '').trim()) // strip leading # chars and trim whitespace
           .filter(Boolean)
       : [],
     isEncrypted: Boolean(note?.isEncrypted || note?.encryptedData),
