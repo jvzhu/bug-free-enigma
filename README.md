@@ -1,6 +1,13 @@
-# 📝 Notes App
+# 🔐 Bug-Free Enigma
+
+[![Product Hunt](https://img.shields.io/badge/Product%20Hunt-Launch%20Day-DA552F?logo=producthunt&logoColor=white)](https://www.producthunt.com/posts/bug-free-enigma)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-4fc3f7?logo=github)](https://jvzhu.github.io/bug-free-enigma/)
+[![Landing Page](https://img.shields.io/badge/Landing%20Page-View-6366f1)](https://jvzhu.github.io/bug-free-enigma/landing.html)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A secure note-taking application built with **React** and **JavaScript**. Notes are persisted automatically using the browser's **localStorage** — no backend required. Features enterprise-grade encryption and authentication powered entirely by the browser's **Web Crypto API**.
+
+**🚀 [Try it live](https://jvzhu.github.io/bug-free-enigma/) &nbsp;|&nbsp; 🎯 [ProductHunt](https://www.producthunt.com/posts/bug-free-enigma) &nbsp;|&nbsp; 🌐 [Landing Page](https://jvzhu.github.io/bug-free-enigma/landing.html)**
 
 ---
 
@@ -237,6 +244,35 @@ cp .env.example .env.local
 ```
 
 Environment variables prefixed with `REACT_APP_` are automatically embedded into the build by Create React App.
+
+---
+
+## 🚀 ProductHunt Launch
+
+Bug-Free Enigma is launching on [ProductHunt](https://www.producthunt.com/posts/bug-free-enigma)!
+
+**Links:**
+
+| Resource | URL |
+|----------|-----|
+| 🌐 Live App | https://jvzhu.github.io/bug-free-enigma/ |
+| 🎯 ProductHunt | https://www.producthunt.com/posts/bug-free-enigma |
+| 🌍 Landing Page | https://jvzhu.github.io/bug-free-enigma/landing.html |
+| 📁 GitHub | https://github.com/jvzhu/bug-free-enigma |
+
+**Marketing assets** are in the [`marketing/`](./marketing/) directory:
+
+| File | Description |
+|------|-------------|
+| [`marketing/landing-page.jsx`](./marketing/landing-page.jsx) | React landing page component |
+| [`marketing/producthunt-kit.md`](./marketing/producthunt-kit.md) | PH submission guide (tagline, description, first comment) |
+| [`marketing/social-media-content.md`](./marketing/social-media-content.md) | Twitter, Reddit, LinkedIn, Dev.to, HN posts |
+| [`marketing/email-campaigns.md`](./marketing/email-campaigns.md) | Email templates (waitlist, follow-up, thank you) |
+| [`marketing/launch-checklist.md`](./marketing/launch-checklist.md) | Day-by-day launch checklist |
+| [`marketing/hour-by-hour-schedule.md`](./marketing/hour-by-hour-schedule.md) | Minute-by-minute launch day plan |
+| [`marketing/analytics-setup.md`](./marketing/analytics-setup.md) | GA4 & UTM tracking guide |
+| [`marketing/post-launch-guide.md`](./marketing/post-launch-guide.md) | Days 2–30 follow-up strategy |
+| [`public/landing.html`](./public/landing.html) | Static landing page (dark mode, mobile-responsive) |
 
 ---
 
