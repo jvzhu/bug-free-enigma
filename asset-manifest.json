@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/bug-free-enigma/static/css/main.e80ff59a.css",
-    "main.js": "/bug-free-enigma/static/js/main.a27bd892.js",
+    "main.css": "/bug-free-enigma/static/css/main.2cbafd97.css",
+    "main.js": "/bug-free-enigma/static/js/main.23ec0537.js",
     "index.html": "/bug-free-enigma/index.html",
-    "main.e80ff59a.css.map": "/bug-free-enigma/static/css/main.e80ff59a.css.map",
-    "main.a27bd892.js.map": "/bug-free-enigma/static/js/main.a27bd892.js.map"
+    "main.2cbafd97.css.map": "/bug-free-enigma/static/css/main.2cbafd97.css.map",
+    "main.23ec0537.js.map": "/bug-free-enigma/static/js/main.23ec0537.js.map"
   },
   "entrypoints": [
-    "static/css/main.e80ff59a.css",
-    "static/js/main.a27bd892.js"
+    "static/css/main.2cbafd97.css",
+    "static/js/main.23ec0537.js"
   ]
 }
