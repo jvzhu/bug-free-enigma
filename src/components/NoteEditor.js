@@ -10,7 +10,7 @@ function NoteEditor({ note, onUpdate }) {
   useEffect(() => {
     setTitle(note.title);
     setContent(note.content);
-  }, [note.id]);
+  }, [note.id, note.title, note.content]);
 
   function scheduleUpdate(newTitle, newContent) {
     if (timerRef.current) {

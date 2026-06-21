@@ -80,7 +80,7 @@ The app opens automatically at [http://localhost:3000](http://localhost:3000).
 npm run build
 ```
 
-The optimised output is placed in the `build/` folder and can be served by any static host.
+The optimized output is placed in the `build/` folder and can be served by any static host.
 
 ---
 
