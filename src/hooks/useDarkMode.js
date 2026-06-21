@@ -18,16 +18,25 @@ export function useDarkMode() {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    const storedPreference = localStorage.getItem(STORAGE_KEY);
-    const nextIsDark = storedPreference === 'true';
-    setIsDark(nextIsDark);
-    applyTheme(nextIsDark);
+    try {
+      const storedPreference = window?.localStorage?.getItem(STORAGE_KEY);
+      const nextIsDark = storedPreference === 'true';
+      setIsDark(nextIsDark);
+      applyTheme(nextIsDark);
+    } catch {
+      setIsDark(false);
+      applyTheme(false);
+    }
   }, []);
 
   const toggleDark = useCallback(() => {
     setIsDark((current) => {
       const next = !current;
-      localStorage.setItem(STORAGE_KEY, String(next));
+      try {
+        window?.localStorage?.setItem(STORAGE_KEY, String(next));
+      } catch {
+        // Ignore storage failures (preference just won't persist).
+      }
       applyTheme(next);
       return next;
     });
