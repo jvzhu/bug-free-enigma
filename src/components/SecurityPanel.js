@@ -7,6 +7,11 @@ import AuditTrailViewer from './AuditTrailViewer';
 import { useAuthContext } from '../hooks/useAuth';
 import { encryptData } from '../utils/crypto';
 import { downloadJson } from '../utils/fileDownload';
+import {
+  downloadMarkdown,
+  exportAllNotesToMarkdown,
+  exportNotesToJson,
+} from '../utils/exportUtils';
 
 async function prepareEncryptedExport(notes, encryptionKey) {
   return Promise.all(
@@ -38,7 +43,7 @@ async function prepareEncryptedExport(notes, encryptionKey) {
   );
 }
 
-function SecurityPanel({ onClose, notes, encryptionKey, onUpdateNotes }) {
+function SecurityPanel({ onClose, notes, encryptionKey, onUpdateNotes, onNotify }) {
   const {
     securityConfig,
     isSetupComplete,
@@ -79,8 +84,30 @@ function SecurityPanel({ onClose, notes, encryptionKey, onUpdateNotes }) {
       setPanelError('');
       const payload = await prepareEncryptedExport(notes, encryptionKey);
       downloadJson(`notes-export-${new Date().toISOString()}.json`, payload);
+      onNotify?.('Encrypted notes exported.', 'success');
     } catch (exportError) {
       setPanelError(exportError?.message || 'Unable to export encrypted notes.');
+    }
+  };
+
+  const handleExportPlainJson = () => {
+    try {
+      setPanelError('');
+      exportNotesToJson(notes);
+      onNotify?.('Plain JSON export downloaded.', 'success');
+    } catch (error) {
+      setPanelError(error?.message || 'Unable to export plain JSON notes.');
+    }
+  };
+
+  const handleExportMarkdown = () => {
+    try {
+      setPanelError('');
+      const timestamp = new Date().toISOString().replace(/:/g, '-');
+      downloadMarkdown(`notes-export-${timestamp}.md`, exportAllNotesToMarkdown(notes));
+      onNotify?.('Markdown export downloaded.', 'success');
+    } catch (error) {
+      setPanelError(error?.message || 'Unable to export markdown notes.');
     }
   };
 
@@ -108,6 +135,7 @@ function SecurityPanel({ onClose, notes, encryptionKey, onUpdateNotes }) {
     setShowAlgorithmPrompt(false);
     setAlgorithmPassword('');
     setPendingAlgorithm('');
+    onNotify?.('Encryption algorithm updated.', 'success');
   };
 
   const confirmClearSecurity = async () => {
@@ -221,9 +249,17 @@ function SecurityPanel({ onClose, notes, encryptionKey, onUpdateNotes }) {
 
             <section className="security-section">
               <h3>Export</h3>
-              <button className="btn btn-action" type="button" onClick={handleExportEncrypted}>
-                Export Encrypted Notes
-              </button>
+              <div className="button-row button-row--stacked">
+                <button className="btn btn-secondary" type="button" onClick={handleExportPlainJson}>
+                  Export as JSON (Plain)
+                </button>
+                <button className="btn btn-secondary" type="button" onClick={handleExportMarkdown}>
+                  Export as Markdown
+                </button>
+                <button className="btn btn-action" type="button" onClick={handleExportEncrypted}>
+                  Export Encrypted Notes
+                </button>
+              </div>
             </section>
 
             <section className="security-section danger-zone">
@@ -318,7 +354,7 @@ function SecurityPanel({ onClose, notes, encryptionKey, onUpdateNotes }) {
         <div className="modal-overlay">
           <div className="modal-box">
             <div className="modal-header">
-              <h3>Confirm Security Reset</h3>
+              <h3>Clear Security Data</h3>
               <button
                 className="btn btn-icon"
                 type="button"
@@ -330,7 +366,7 @@ function SecurityPanel({ onClose, notes, encryptionKey, onUpdateNotes }) {
                 ✕
               </button>
             </div>
-            <p>Enter your current master password to clear all security settings and audit history.</p>
+            <p>Enter your current password to confirm. This will remove your security settings, biometrics, and audit history.</p>
             <label className="form-field">
               <span>Current password</span>
               <input
@@ -341,12 +377,7 @@ function SecurityPanel({ onClose, notes, encryptionKey, onUpdateNotes }) {
               />
             </label>
             <div className="button-row">
-              <button
-                className="btn btn-danger-solid"
-                type="button"
-                onClick={confirmClearSecurity}
-                disabled={!clearSecurityPassword}
-              >
+              <button className="btn btn-danger-solid" type="button" onClick={confirmClearSecurity} disabled={!clearSecurityPassword}>
                 Clear Security Data
               </button>
               <button

@@ -752,3 +752,228 @@
     align-items: stretch;
   }
 }
+
+
+.import-modal {
+  display: grid;
+  gap: 1rem;
+}
+
+.import-textarea {
+  min-height: 180px;
+  width: 100%;
+  resize: vertical;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.85rem;
+  font: inherit;
+}
+
+.tab-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.import-preview,
+.share-warning {
+  font-size: 0.92rem;
+  color: #475569;
+}
+
+.inline-tag-editor {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.inline-tag-editor input {
+  flex: 1;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+}
+
+.shortcuts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.shortcuts-table td {
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.shortcuts-table code {
+  display: inline-block;
+  min-width: 88px;
+  padding: 0.2rem 0.45rem;
+  border-radius: 8px;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.toast-container {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  display: grid;
+  gap: 0.75rem;
+  z-index: 80;
+}
+
+.toast {
+  min-width: 280px;
+  max-width: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+  color: #fff;
+}
+
+.toast--success {
+  background: #16a34a;
+}
+
+.toast--error {
+  background: #dc2626;
+}
+
+.toast--info {
+  background: #2563eb;
+}
+
+.toast-dismiss {
+  color: inherit;
+  opacity: 1;
+}
+
+[data-theme="dark"] {
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --bg-card: #0f3460;
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0b0;
+  --border-color: #2a2a4a;
+  --accent-color: #4ecca3;
+}
+
+[data-theme="dark"] .app {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .app-header {
+  background: var(--bg-secondary);
+  border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .sidebar {
+  background: var(--bg-secondary);
+  border-right-color: var(--border-color);
+}
+
+[data-theme="dark"] .editor-pane,
+[data-theme="dark"] .note-editor,
+[data-theme="dark"] .empty-state {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .note-item,
+[data-theme="dark"] .batch-note-row,
+[data-theme="dark"] .security-section,
+[data-theme="dark"] .setup-wizard-panel,
+[data-theme="dark"] .recovery-code-pill,
+[data-theme="dark"] .audit-table th {
+  background: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .note-item-title,
+[data-theme="dark"] .note-editor-title,
+[data-theme="dark"] .note-editor-content,
+[data-theme="dark"] .form-field span,
+[data-theme="dark"] .checkbox-row,
+[data-theme="dark"] .note-item-preview,
+[data-theme="dark"] .note-item-date,
+[data-theme="dark"] .batch-note-status,
+[data-theme="dark"] .import-preview,
+[data-theme="dark"] .share-warning,
+[data-theme="dark"] .password-strength-meter-meta {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .note-item:hover,
+[data-theme="dark"] .note-item--selected {
+  background: #1a4a7a;
+}
+
+[data-theme="dark"] .note-editor-title {
+  border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .modal-box {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .security-panel {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .btn {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .btn-action {
+  background: #2563eb;
+  color: #fff;
+  border-color: #1d4ed8;
+}
+
+[data-theme="dark"] .btn-header {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .progress-bar,
+[data-theme="dark"] .shortcuts-table td,
+[data-theme="dark"] .security-panel-header,
+[data-theme="dark"] .audit-table td,
+[data-theme="dark"] .audit-table th,
+[data-theme="dark"] .note-item,
+[data-theme="dark"] .sidebar {
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .danger-zone {
+  background: #3b1720;
+  border-color: #7f1d1d;
+}
+
+[data-theme="dark"] .encrypted-note-state {
+  background: rgba(15, 52, 96, 0.35);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .note-tag,
+[data-theme="dark"] .note-lock-badge,
+[data-theme="dark"] .shortcuts-table code {
+  background: rgba(78, 204, 163, 0.12);
+  color: var(--accent-color);
+}
