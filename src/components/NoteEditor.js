@@ -22,6 +22,7 @@ function NoteEditor({ note, onUpdate }) {
   const [modalError, setModalError] = useState('');
   const [cryptoAvailable] = useState(isCryptoAvailable);
   const timerRef = useRef(null);
+  const mountedRef = useRef(true);
 
   function parseTags(raw) {
     return raw
@@ -33,15 +34,14 @@ function NoteEditor({ note, onUpdate }) {
   function scheduleUpdate(newTitle, newContent, newTags) {
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(async () => {
+      if (!mountedRef.current) return;
       const tags = parseTags(newTags !== undefined ? newTags : tagInput);
       if (note.isEncrypted && activePassword) {
         try {
           const encrypted = await encryptContent(newContent, activePassword);
-          onUpdate(note.id, {
-            title: newTitle,
-            tags,
-            ...encrypted,
-          });
+          if (mountedRef.current) {
+            onUpdate(note.id, { title: newTitle, tags, ...encrypted });
+          }
         } catch (err) {
           console.error('Failed to re-encrypt note on save:', err);
         }
@@ -54,13 +54,13 @@ function NoteEditor({ note, onUpdate }) {
   function handleTitleChange(e) {
     const value = e.target.value;
     setTitle(value);
-    scheduleUpdate(value, content);
+    scheduleUpdate(value, content, tagInput);
   }
 
   function handleContentChange(e) {
     const value = e.target.value;
     setContent(value);
-    scheduleUpdate(title, value);
+    scheduleUpdate(title, value, tagInput);
   }
 
   function handleTagInputChange(e) {
@@ -119,7 +119,7 @@ function NoteEditor({ note, onUpdate }) {
         setShowModal(false);
         setModalError('');
       } catch {
-        setModalError('Incorrect password. Please try again.');
+        setModalError('Failed to unlock note. Please verify your password and try again.');
       }
     }
   }
@@ -141,7 +141,9 @@ function NoteEditor({ note, onUpdate }) {
   // ── Cleanup ────────────────────────────────────────────────────────────────
 
   useEffect(() => {
+    mountedRef.current = true;
     return () => {
+      mountedRef.current = false;
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, []);
