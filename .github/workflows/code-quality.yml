@@ -33,13 +33,9 @@ jobs:
 
       - name: Run TypeScript type check
         id: typecheck
+        if: hashFiles('tsconfig.json') != ''
         continue-on-error: true
-        run: |
-          if [ -f tsconfig.json ]; then
-            npx tsc --noEmit
-          else
-            echo "No tsconfig.json found; skipping type check."
-          fi
+        run: npx --no-install tsc --noEmit
 
       - name: Run build
         id: build
