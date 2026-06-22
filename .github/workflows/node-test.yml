@@ -44,13 +44,15 @@ jobs:
           fi
 
       - name: Upload test results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results-node-${{ matrix.node-version }}
           path: test-results-${{ matrix.node-version }}.json
-          if-no-files-found: error
+          if-no-files-found: warn
 
       - name: Upload coverage report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-node-${{ matrix.node-version }}
