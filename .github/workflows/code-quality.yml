@@ -29,14 +29,14 @@ jobs:
       - name: Run ESLint
         id: eslint
         continue-on-error: true
-        run: npx eslint "src/**/*.{js,jsx,ts,tsx}" --format json --output-file eslint-report.json
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx --ignore-pattern node_modules --ignore-pattern build --format json --output-file eslint-report.json
 
       - name: Run TypeScript type check
         id: typecheck
         continue-on-error: true
         run: |
           if [ -f tsconfig.json ]; then
-            npm run typecheck --if-present
+            npx tsc --noEmit
           else
             echo "No tsconfig.json found; skipping type check."
           fi
@@ -113,7 +113,7 @@ jobs:
       - name: Fail job when checks fail
         if: always()
         run: |
-          if [ "${{ steps.eslint.outcome }}" != "success" ] || [ "${{ steps.typecheck.outcome }}" != "success" ] || [ "${{ steps.build.outcome }}" != "success" ]; then
+          if [ "${{ steps.eslint.outcome }}" = "failure" ] || [ "${{ steps.typecheck.outcome }}" = "failure" ] || [ "${{ steps.build.outcome }}" = "failure" ]; then
             echo "One or more quality checks failed."
             exit 1
           fi

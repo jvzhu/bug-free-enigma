@@ -35,7 +35,13 @@ jobs:
         run: npm install
 
       - name: Run tests with coverage
-        run: CI=true npm test -- --watchAll=false --coverage --json --outputFile=test-results-${{ matrix.node-version }}.json
+        run: |
+          if npm test -- --help 2>&1 | grep -q -- "--coverage"; then
+            CI=true npm test -- --watchAll=false --coverage --json --outputFile=test-results-${{ matrix.node-version }}.json
+          else
+            CI=true npm test
+            echo '{"note":"Test runner does not support Jest JSON output flags."}' > test-results-${{ matrix.node-version }}.json
+          fi
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
