@@ -1,0 +1,117 @@
+name: Code Quality
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        id: eslint
+        continue-on-error: true
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx --ignore-pattern node_modules --ignore-pattern build --format json --output-file eslint-report.json
+
+      - name: Run TypeScript type check
+        id: typecheck
+        if: hashFiles('tsconfig.json') != ''
+        continue-on-error: true
+        run: npx --no-install tsc --noEmit
+
+      - name: Run build
+        id: build
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee build-report.txt
+
+      - name: Generate quality summary
+        if: always()
+        run: |
+          {
+            echo "## Code Quality Summary"
+            echo ""
+            echo "- ESLint: ${{ steps.eslint.outcome }}"
+            echo "- Type check: ${{ steps.typecheck.outcome }}"
+            echo "- Build: ${{ steps.build.outcome }}"
+          } | tee quality-summary.md
+
+      - name: Upload quality reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-quality-reports
+          path: |
+            eslint-report.json
+            build-report.txt
+            quality-summary.md
+          if-no-files-found: warn
+
+      - name: Comment PR with quality results
+        if: github.event_name == 'pull_request' && always() && github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const marker = '<!-- code-quality-report -->';
+            const body = [
+              marker,
+              '## 🔍 Code Quality Results',
+              '- ESLint: **${{ steps.eslint.outcome }}**',
+              '- Type check: **${{ steps.typecheck.outcome }}**',
+              '- Build: **${{ steps.build.outcome }}**'
+            ].join('\n');
+
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number,
+              per_page: 100
+            });
+            const previous = comments.find((comment) =>
+              comment.user.type === 'Bot' && comment.body && comment.body.includes(marker)
+            );
+
+            if (previous) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: previous.id,
+                body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number,
+                body
+              });
+            }
+
+      - name: Fail job when checks fail
+        if: always()
+        run: |
+          if [ "${{ steps.eslint.outcome }}" = "failure" ] || [ "${{ steps.typecheck.outcome }}" = "failure" ] || [ "${{ steps.build.outcome }}" = "failure" ]; then
+            echo "One or more quality checks failed."
+            exit 1
+          fi
