@@ -72,11 +72,13 @@ jobs:
         with:
           script: |
             const marker = '<!-- code-quality-report -->';
-            const body = `${marker}
-            ## 🔍 Code Quality Results
-            - ESLint: **${{ steps.eslint.outcome }}**
-            - Type check: **${{ steps.typecheck.outcome }}**
-            - Build: **${{ steps.build.outcome }}**`;
+            const body = [
+              marker,
+              '## 🔍 Code Quality Results',
+              '- ESLint: **${{ steps.eslint.outcome }}**',
+              '- Type check: **${{ steps.typecheck.outcome }}**',
+              '- Build: **${{ steps.build.outcome }}**'
+            ].join('\n');
 
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
